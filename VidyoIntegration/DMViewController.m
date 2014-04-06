@@ -7,6 +7,7 @@
 //
 
 #import "DMViewController.h"
+#import "VidyoWrapper.h"
 
 @interface DMViewController ()
 
@@ -17,7 +18,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	// Do any additional setup after loading the view, typically from a nib
+    VidyoWrapper *wrapper = [VidyoWrapper sharedInstance];
+    [wrapper joinConferenceWithURL:@"test"];
 }
 
 - (void)didReceiveMemoryWarning
