@@ -7,9 +7,10 @@
 //
 
 #import "DMViewController.h"
+#import "VidyoConstants.h"
 #import "VidyoWrapper.h"
 
-@interface DMViewController ()
+@interface DMViewController () <UITextViewDelegate>
 @property (strong, nonatomic) VidyoWrapper *wrapper;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @end
@@ -24,7 +25,15 @@
 - (IBAction)initPressed:(id)sender {
     self.wrapper = [VidyoWrapper sharedInstance];
     [self.wrapper addObserver:self
-                   forKeyPath:@"dynamicNotification"
+                   forKeyPath:kVidyoDynamicNotification
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+    [self.wrapper addObserver:self
+                   forKeyPath:kVidyoIsSigningIn
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+    [self.wrapper addObserver:self
+                   forKeyPath:kVidyoClientStarted
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
     self.textView.text = @"Initialized Vidyo Library";
@@ -49,15 +58,27 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    __block NSString *newValue = [change objectForKey:NSKeyValueChangeNewKey];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.textView.text = [NSString stringWithFormat:@"%@\n\n%@",self.textView.text,newValue];
-        [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
-    });
+    if ([keyPath isEqualToString:kVidyoDynamicNotification]) {
+        __block NSString *newValue = [change objectForKey:NSKeyValueChangeNewKey];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.textView.text = [NSString stringWithFormat:@"%@\n\n%@",self.textView.text,newValue];
+        });
+    } else if ([keyPath isEqualToString:kVidyoIsSigningIn] || [keyPath isEqualToString:kVidyoClientStarted]) {
+        __block BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.textView.text = [NSString stringWithFormat:@"%@\n\n%@ - %@",self.textView.text,keyPath,newValue?@"TRUE":@"FALSE"];
+        });
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
 }
 
 -(void)dealloc {
-    [self.wrapper removeObserver:self forKeyPath:@"dynamicNotification"];
+    [self.wrapper removeObserver:self forKeyPath:kVidyoDynamicNotification];
+    [self.wrapper removeObserver:self forKeyPath:kVidyoIsSigningIn];
+    [self.wrapper removeObserver:self forKeyPath:kVidyoClientStarted];
 }
 
 @end

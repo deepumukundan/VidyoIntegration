@@ -91,6 +91,7 @@
 		5542644618F0761F00BE41F9 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "../../VidyoClientAPI_Deepu/sample/NSString+Base64.h"; sourceTree = "<group>"; };
 		5542644718F0761F00BE41F9 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "../../VidyoClientAPI_Deepu/sample/NSString+Base64.m"; sourceTree = "<group>"; };
 		5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = VidyoClientSample_iOS.entitlements; path = ../VidyoClientSample_iOS.entitlements; sourceTree = "<group>"; };
+		557E2A0C18F1AF24000140D1 /* VidyoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +256,7 @@
 		5573098318F13A57005FEBB0 /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
+				557E2A0C18F1AF24000140D1 /* VidyoConstants.h */,
 				5542644218F0761100BE41F9 /* VidyoWrapper.h */,
 				5542644318F0761100BE41F9 /* VidyoWrapper.m */,
 				5542644018F0761100BE41F9 /* VidyoEventBridge.h */,
