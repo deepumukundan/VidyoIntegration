@@ -20,6 +20,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.textView.delegate = self;
+    self.textView.scrollEnabled = YES;
 }
 
 - (IBAction)initPressed:(id)sender {
@@ -62,17 +64,15 @@
         __block NSString *newValue = [change objectForKey:NSKeyValueChangeNewKey];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.textView.text = [NSString stringWithFormat:@"%@\n\n%@",self.textView.text,newValue];
+            [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
         });
     } else if ([keyPath isEqualToString:kVidyoIsSigningIn] || [keyPath isEqualToString:kVidyoClientStarted]) {
         __block BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.textView.text = [NSString stringWithFormat:@"%@\n\n%@ - %@",self.textView.text,keyPath,newValue?@"TRUE":@"FALSE"];
+            [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
         });
     }
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
 }
 
 -(void)dealloc {
