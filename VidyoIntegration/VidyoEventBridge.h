@@ -12,9 +12,9 @@
 
 // Receive out event from VidyoClient
 void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent actionType,
-										 VidyoVoidPtr param, 
-										 VidyoUint paramSize,
-										 VidyoVoidPtr data);
+                                          VidyoVoidPtr        param,
+                                          VidyoUint           paramSize,
+                                          VidyoVoidPtr        data);
 
 // Multi Logging Adaptor
 void logMsg(NSString *msg);

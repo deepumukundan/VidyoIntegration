@@ -17,68 +17,67 @@
 
 @implementation DMViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.textView.delegate = self;
-    self.textView.scrollEnabled = YES;
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	self.textView.delegate = self;
+	self.textView.scrollEnabled = YES;
 }
 
 - (IBAction)initPressed:(id)sender {
-    self.wrapper = [VidyoWrapper sharedInstance];
-    [self.wrapper addObserver:self
-                   forKeyPath:kVidyoDynamicNotification
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-    [self.wrapper addObserver:self
-                   forKeyPath:kVidyoIsSigningIn
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-    self.textView.text = @"Initialized Vidyo Library";
+	self.wrapper = [VidyoWrapper sharedInstance];
+	[self.wrapper addObserver:self
+	               forKeyPath:kVidyoDynamicNotification
+	                  options:NSKeyValueObservingOptionNew
+	                  context:NULL];
+	[self.wrapper addObserver:self
+	               forKeyPath:kVidyoIsSigningIn
+	                  options:NSKeyValueObservingOptionNew
+	                  context:NULL];
+	self.textView.text = @"Initialized Vidyo Library";
 }
 
 - (IBAction)loginPressed:(id)sender {
-    [self.wrapper loginWithURL:@"" userName:@"" password:@""];
+	[self.wrapper loginWithURL:@"http://dev20.vidyo.com" userName:@"marina" password:@"marina"];
 }
 
 - (IBAction)joinPressed:(id)sender {
-    [self.wrapper initiateConferenceWithURL:@""];
+	[self.wrapper initiateConferenceWithURL:@"http://dev20.vidyo.com"];
 }
 
 - (IBAction)guestPressed:(id)sender {
-    [self.wrapper joinRoomWithURL:@"https://video.ust-global.com" roomKey:@"LvJZe5NNlzrd" guestName:@"BugleTester"];
+	// [self.wrapper joinRoomAsGuestWithURL:@"https://video.ust-global.com" roomKey:@"LvJZe5NNlzrd" guestName:@"GreenBot"];
+    [self.wrapper joinRoomAsGuestWithURL:@"http://dev20.vidyo.com" roomKey:@"svXhf7He5RQU" guestName:@"YellowBot"];
 }
-
 
 - (IBAction)clearPressed:(id)sender {
-    self.textView.text = @"";
+	self.textView.text = @"";
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)didReceiveMemoryWarning {
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:kVidyoDynamicNotification]) {
-        __block NSString *newValue = [change objectForKey:NSKeyValueChangeNewKey];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.textView.text = [NSString stringWithFormat:@"%@\n\n%@",self.textView.text,newValue];
-            [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
-        });
-    } else if ([keyPath isEqualToString:kVidyoIsSigningIn]) {
-        __block BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.textView.text = [NSString stringWithFormat:@"%@\n\n%@ - %@",self.textView.text,keyPath,newValue?@"TRUE":@"FALSE"];
-            [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
-        });
-    }
+	if ([keyPath isEqualToString:kVidyoDynamicNotification]) {
+		__block NSString *newValue = [change objectForKey:NSKeyValueChangeNewKey];
+		dispatch_async(dispatch_get_main_queue(), ^{
+		    self.textView.text = [NSString stringWithFormat:@"%@\n\n%@", self.textView.text, newValue];
+		    [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
+		});
+	}
+	else if ([keyPath isEqualToString:kVidyoIsSigningIn]) {
+		__block BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+		dispatch_async(dispatch_get_main_queue(), ^{
+		    self.textView.text = [NSString stringWithFormat:@"%@\n\n%@ - %@", self.textView.text, keyPath, newValue ? @"TRUE":@"FALSE"];
+		    [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
+		});
+	}
 }
 
--(void)dealloc {
-    [self.wrapper removeObserver:self forKeyPath:kVidyoDynamicNotification];
-    [self.wrapper removeObserver:self forKeyPath:kVidyoIsSigningIn];
+- (void)dealloc {
+	[self.wrapper removeObserver:self forKeyPath:kVidyoDynamicNotification];
+	[self.wrapper removeObserver:self forKeyPath:kVidyoIsSigningIn];
 }
 
 @end

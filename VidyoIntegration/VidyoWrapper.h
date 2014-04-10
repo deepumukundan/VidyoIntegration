@@ -23,10 +23,10 @@
 #pragma mark - Public Method Calls
 // Returns singleton instance of the class
 + (id)sharedInstance;
-// Logs in a member with password
+// Enter a room as guest
+- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName;
+// Logs in a Vidyo member with password
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName password:(NSString *)password;
-// Guest login to conference room
-- (void)joinRoomWithURL:(NSString *)url roomKey:(NSString * )roomKey guestName:(NSString *)guestName;
-// Temp
+// Starts conference for a logged in member
 - (void)initiateConferenceWithURL:(NSString *)baseURL;
 @end
