@@ -1,8 +1,7 @@
 //
-//  VidyoConstants.h
-//  VidyoIntegration
+//  Project - VidyoIntegration
 //
-//  Created by Deepu Mukundan on 06/04/14.
+//  Created by Deepu Mukundan on 09/04/14.
 //  Copyright (c) 2014 Deepu Mukundan. All rights reserved.
 //
 
