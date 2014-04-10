@@ -1,5 +1,5 @@
 //
-//  Project - VidyoIntegration
+//  Project - VidyoIntegration from Kony
 //
 //  Created by Deepu Mukundan on 09/04/14.
 //  Copyright (c) 2014 Deepu Mukundan. All rights reserved.
@@ -11,24 +11,31 @@
 #import "VidyoWrapper.h"
 #import "VidyoEventBridge.h"
 
+
 #pragma mark - Private Interface
 @interface VidyoWrapper() <NSXMLParserDelegate, UIAlertViewDelegate>
 
-@property (nonatomic) BOOL entityIDResult;
-@property (nonatomic) BOOL memberStatusResult;
+@property (nonatomic) BOOL vidyoClientStarted;
 @property (nonatomic) BOOL didEverGoToBackground;
 @property (nonatomic, assign) unsigned lastKnownOrientation;
-
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, strong) NSMutableString *vidyoEntityID;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) NSMutableData *webData;
 @property (nonatomic, strong) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSURLConnection *webConnection ;
+
+@property (nonatomic) BOOL entityIDResult;
+@property (nonatomic, strong) NSMutableString *vidyoEntityID;
+@property (nonatomic) BOOL memberStatusResult;
 @property (nonatomic, strong) NSMutableString *vidyoMemberStatus;
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic) BOOL guestIDResult;
+@property (nonatomic, strong) NSMutableDictionary *vidyoGuestResponse;
+@property (nonatomic, strong) NSMutableString *vidyoGuestID;
 
 @property (nonatomic, strong) NSString *serverURL;
 @property (nonatomic, strong) NSString *serverName;
 @property (nonatomic, strong) NSString *serverPass;
+@property (nonatomic) BOOL guestMode;
 
 @end
 
@@ -83,10 +90,8 @@
 
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName password:(NSString *)password {
 
-    self.entityIDResult = FALSE;
-	self.memberStatusResult = FALSE;
-	self.isJoiningConference = FALSE;
-    self.vidyoMemberStatus = nil;
+    // Reset for new operation
+    [self resetState];
     
     /* If portal URL does not start with schema than put it there explicetly */
 	if(!([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"])) {
@@ -107,7 +112,6 @@
     [self createToastAlertWithMessage:@"Signing in\nPlease Wait..."];
     
     // send login-event to VidyoClient
-    self.webData = [NSMutableData data];
     if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) == false) {
         [self dismissToastAlert];
         [self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
@@ -117,20 +121,57 @@
     }
 }
 
-- (void)joinConferenceWithURL:(NSString *)baseURL {
+- (void)joinRoomWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName {
+ 
+    // Reset for new operation
+    [self resetState];
+    
+    self.guestMode = YES;
+    
+    NSMutableURLRequest *theRequest = [self createURLRequestFromString:url];
+    
+    NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                             "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
+                             "<env:Body>"
+                             "<ns1:LogInAsGuestRequest>"
+                             "<ns1:roomKey>%@</ns1:roomKey>"
+                             "<ns1:guestName>%@</ns1:guestName>"
+                             "</ns1:LogInAsGuestRequest>"
+                             "</env:Body>"
+                             "</env:Envelope>",roomKey,guestName];
+    
+    NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
+    [theRequest addValue:@"application/soap+xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [theRequest addValue:@"LogInAsGuest" forHTTPHeaderField:@"SOAPAction"];
+    [theRequest addValue:msgLength forHTTPHeaderField:@"Content-Length"];
+    [theRequest setHTTPMethod:@"POST"];
+    [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    self.isJoiningConference = TRUE;
+    /* Create and show a wait alert */
+    [self createToastAlertWithMessage:@"Joining Conference\nPlease Wait..."];
+    
+    self.webConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	if (!self.webConnection) {
+		logMsg(@"The Connection is NULL");
+	}
+    
+    logMsg(@"***SENT SOAP Request Guest()***");
+}
+
+- (void)initiateConferenceWithURL:(NSString *)baseURL {
 	/* The joinConference is broken into 2 steps
 	 * Step1: get the entityID from VidyoPortal using WS User::myAccount() API
 	 * Step2: if entityID is successfully retrieved and the entity is 'online', do WS User::joinConference
 	 */
     
-    self.entityIDResult = FALSE;
-	self.memberStatusResult = FALSE;
-	self.isJoiningConference = FALSE;
+    // Reset for new operation
+    [self resetState];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@/services/v1_1/VidyoPortalUserService?wsdl",self.serverURL];
-    NSURL *url = [NSURL URLWithString:urlString];
-	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
+    // Signin in using credentials so turning off guest mode
+    self.guestMode = NO;
     
+    NSMutableURLRequest *theRequest = [self createURLRequestFromString:self.serverURL];
 	// Get the EntityId from VidyoPortal using WS User::myAccount
 	NSString *soapMessage = [NSString stringWithFormat:
 	                         @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -144,22 +185,82 @@
 	[theRequest addValue:@"application/soap+xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 	[theRequest addValue:@"myAccount" forHTTPHeaderField:@"SOAPAction"];
 	[theRequest addValue:msgLength forHTTPHeaderField:@"Content-Length"];
-    NSString *base64 = [[NSString stringWithFormat:@"%@:%@",_serverName,_serverPass] base64];
+    NSString *base64 = [[NSString stringWithFormat:@"%@:%@",self.serverName,self.serverPass] base64];
     NSString *auth = [NSString stringWithFormat:@"Basic %@", base64];
-    [theRequest addValue: auth forHTTPHeaderField:@"Authorization"];
+    [theRequest addValue:auth forHTTPHeaderField:@"Authorization"];
 	[theRequest setHTTPMethod:@"POST"];
 	[theRequest setHTTPBody:[soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
     
     self.isJoiningConference = TRUE;
     [self createToastAlertWithMessage:@"Joining Conference\nPlease Wait..."];
     
-	NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	if (theConnection) {
-		self.webData = [NSMutableData data];
-	} else {
+	self.webConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	if (!self.webConnection) {
 		logMsg(@"The Connection is NULL");
 	}
-	logMsg(@"****SENT SOAP Request myAccount()****");
+	logMsg(@"***SENT SOAP Request myAccount()***");
+}
+
+- (void)joinConferenceAsGuest {
+    
+    NSMutableURLRequest *theRequest = [self createURLRequestFromString:@"https://video.ust-global.com"];
+    NSString *SOAPRequestXML=[NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                              "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:gues=\"http://portal.vidyo.com/guest\">"
+                              "<env:Body>""<gues:GuestJoinConferenceRequest>"
+                              "<gues:guestID>%@</gues:guestID>"
+                              "</gues:GuestJoinConferenceRequest>""</env:Body>""</env:Envelope>",self.vidyoGuestID];
+    
+    NSString *msgLength = [NSString stringWithFormat:@"%d", [SOAPRequestXML length]];
+    [theRequest addValue:@"application/soap+xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [theRequest addValue:@"GuestJoinConference" forHTTPHeaderField:@"SOAPAction"];
+    [theRequest addValue:msgLength forHTTPHeaderField:@"Content-Length"];
+    [theRequest setHTTPMethod:@"POST"];
+    [theRequest setHTTPBody:[SOAPRequestXML dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    self.isJoiningConference = FALSE;
+    [self dismissToastAlert];
+    
+	self.webConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	if (!self.webConnection) {
+		logMsg(@"The Connection is NULL");
+	}
+    
+	logMsg(@"***SENT SOAP Request GuestJoin()***");
+}
+
+- (void)joinConferenceWithCredentials {
+    
+    NSMutableURLRequest *theJoinRequest = [self createURLRequestFromString:self.serverURL];
+    
+    // Get the EntityId from VidyoPortal using WS User::myAccount
+    NSString *soapJoinMessage = [NSString stringWithFormat:
+                                 @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                 "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/user/v1_1\">"
+                                 "<env:Body>"
+                                 "<ns1:JoinConferenceRequest>"
+                                 "<ns1:conferenceID>%@</ns1:conferenceID>"
+                                 "</ns1:JoinConferenceRequest>"
+                                 "</env:Body>"
+                                 "</env:Envelope>", self.vidyoEntityID];
+    
+    NSString *msgLength = [NSString stringWithFormat:@"%d", [soapJoinMessage length]];
+    [theJoinRequest addValue:@"application/soap+xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [theJoinRequest addValue:@"joinConference" forHTTPHeaderField:@"SOAPAction"];
+    [theJoinRequest addValue:msgLength forHTTPHeaderField:@"Content-Length"];
+    NSString *base64 = [[NSString stringWithFormat:@"%@:%@",_serverName,_serverPass] base64];
+    NSString *auth = [NSString stringWithFormat:@"Basic %@", base64];
+    [theJoinRequest addValue:auth forHTTPHeaderField:@"Authorization"];
+    [theJoinRequest setHTTPMethod:@"POST"];
+    [theJoinRequest setHTTPBody:[soapJoinMessage dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    [self dismissToastAlert];
+    
+    self.webConnection = [[NSURLConnection alloc] initWithRequest:theJoinRequest delegate:self];
+    if (!self.webConnection) {
+        logMsg(@"The Connection is NULL");
+    }
+    
+    logMsg(@"**SENT SOAP Request joinConference()**");
 }
 
 #pragma mark - Alert Display Methods
@@ -186,16 +287,14 @@
 }
 
 - (void)createStandardAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
-    if (!self.suppressAlerts) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                            message:message
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+    });
 }
 
 - (void)dismissToastAlert {
@@ -424,7 +523,10 @@ FAIL:
 
 #pragma mark - NSURLConnection Delegates
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[self.webData setLength:0];
+    if (!self.webData) {
+        self.webData = [NSMutableData data];
+    }
+    [self.webData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -437,50 +539,19 @@ FAIL:
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	logMsg([NSString stringWithFormat:@"DONE. Received Bytes: %d", [self.webData length]]);
-//	NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes] length:[self.webData length] encoding:NSUTF8StringEncoding];
-//	logMsg(theXML);
 
 	self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
+    self.webData = nil;
 	[self.xmlParser setDelegate:self];
 	[self.xmlParser setShouldResolveExternalEntities:YES];
 	[self.xmlParser parse];
 
-	/* Step2: Send the joinConference if the status is online */
-	if (self.isJoiningConference) {
-        
-        NSString *urlString = [NSString stringWithFormat:@"%@/services/v1_1/VidyoPortalUserService?wsdl",_serverURL];
-        NSMutableURLRequest *theJoinRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-
-		// Get the EntityId from VidyoPortal using WS User::myAccount
-		NSString *soapJoinMessage = [NSString stringWithFormat:
-		                             @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-		                             "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/user/v1_1\">"
-		                             "<env:Body>"
-		                             "<ns1:JoinConferenceRequest>"
-		                             "<ns1:conferenceID>%@</ns1:conferenceID>"
-		                             "</ns1:JoinConferenceRequest>"
-		                             "</env:Body>"
-		                             "</env:Envelope>", self.vidyoEntityID];
-
-		NSString *msgLength = [NSString stringWithFormat:@"%d", [soapJoinMessage length]];
-		[theJoinRequest addValue:@"application/soap+xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-		[theJoinRequest addValue:@"joinConference" forHTTPHeaderField:@"SOAPAction"];
-		[theJoinRequest addValue:msgLength forHTTPHeaderField:@"Content-Length"];
-        NSString *base64 = [[NSString stringWithFormat:@"%@:%@",_serverName,_serverPass] base64];
-		NSString *auth = [NSString stringWithFormat:@"Basic %@", base64];
-		[theJoinRequest addValue:auth forHTTPHeaderField:@"Authorization"];
-		[theJoinRequest setHTTPMethod:@"POST"];
-		[theJoinRequest setHTTPBody:[soapJoinMessage dataUsingEncoding:NSUTF8StringEncoding]];
-
-		NSURLConnection *theJoinConnection = [[NSURLConnection alloc] initWithRequest:theJoinRequest delegate:self];
-		if (theJoinConnection) {
-			self.webData = [NSMutableData data];
-		}
-		else {
-			logMsg(@"The Connection is NULL");
-		}
-		logMsg(@"**SENT SOAP Request joinConference()**");
-        [self dismissToastAlert];
+	if (self.isJoiningConference && self.guestMode) {
+        [self joinConferenceAsGuest];
+        return;
+    } else if (self.isJoiningConference && !self.guestMode) {
+        [self joinConferenceWithCredentials];
+        return;
     }
 }
 
@@ -511,17 +582,18 @@ FAIL:
 	}
 	/* separate namespace from element name */
 	if ([element isEqualToString:@"entityID"]) {
-		if (!self.vidyoEntityID) {
-			self.vidyoEntityID = [[NSMutableString alloc] initWithCapacity:256];
-		}
+		if (!self.vidyoEntityID) self.vidyoEntityID = [[NSMutableString alloc] initWithCapacity:256];
 		self.entityIDResult = TRUE;
-	}
-	else if ([element isEqualToString:@"MemberStatus"]) {
-		if (!self.vidyoMemberStatus) {
-			self.vidyoMemberStatus = [[NSMutableString alloc] initWithCapacity:256];
-		}
+	} else if ([element isEqualToString:@"MemberStatus"]) {
+		if (!self.vidyoMemberStatus) self.vidyoMemberStatus = [[NSMutableString alloc] initWithCapacity:256];
 		self.memberStatusResult = TRUE;
-	}
+	} else if ([element isEqualToString:@"ns1:LogInAsGuestResponse"]) {
+		if (!self.vidyoGuestResponse) self.vidyoGuestResponse = [NSMutableDictionary dictionary];
+		self.entityIDResult = TRUE;
+    } else if ([element isEqualToString:@"guestID"]) {
+        if (!self.vidyoGuestID) self.vidyoGuestID = [[NSMutableString alloc] initWithCapacity:256];
+        self.guestIDResult = TRUE;
+    }
 }
 
 - (NSString *)getElementFromElementName:(NSString *)elementName {
@@ -542,8 +614,7 @@ FAIL:
 	if (self.entityIDResult) {
 		[self.vidyoEntityID appendString:string];
 		self.entityIDResult = FALSE;
-	}
-	else if (self.memberStatusResult) {
+	} else if (self.memberStatusResult) {
 		[self.vidyoMemberStatus appendString:string];
 		self.memberStatusResult = FALSE;
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
@@ -551,22 +622,45 @@ FAIL:
 			// Show an alert if user is not online
 			[self createStandardAlertWithTitle:@"User not online. Make sure user is Logged In" andMessage:@""];
 		}
-	}
+	} else if (self.guestIDResult) {
+        [self.vidyoGuestID appendString:string];
+		self.guestIDResult = FALSE;
+    }
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
 	NSString *element = [self getElementFromElementName:elementName];
-	if (!element) {
-		return;
-	}
+	if (!element) return;
 	if ([element isEqualToString:@"MyAccountResponse"]) {
 		self.entityIDResult = FALSE;
 	}
 }
 
+#pragma mark - Helper Methods
 - (void)logMsg:(NSString *)msg {
     self.dynamicNotification = msg;
     NSLog(@"%@",msg);
+}
+
+- (void)resetState {
+    self.entityIDResult = FALSE;
+	self.memberStatusResult = FALSE;
+    self.isSigningIn = FALSE;
+	self.isJoiningConference = FALSE;
+    self.vidyoMemberStatus = nil;
+    self.entityIDResult = FALSE;
+}
+
+- (NSMutableURLRequest *)createURLRequestFromString:(NSString *)string {
+    NSString *urlString;
+    if (self.guestMode) {
+        urlString = [NSString stringWithFormat:@"%@/services/VidyoPortalGuestService?wsdl",string];
+    } else {
+       urlString = [NSString stringWithFormat:@"%@/services/v1_1/VidyoPortalUserService?wsdl",string];
+    }
+    NSURL *url = [NSURL URLWithString:urlString];
+	NSMutableURLRequest *urlReuest = [NSMutableURLRequest requestWithURL:url];
+    return urlReuest;
 }
 
 @end

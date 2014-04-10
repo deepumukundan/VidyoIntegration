@@ -34,10 +34,6 @@
                    forKeyPath:kVidyoIsSigningIn
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
-    [self.wrapper addObserver:self
-                   forKeyPath:kVidyoClientStarted
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
     self.textView.text = @"Initialized Vidyo Library";
 }
 
@@ -46,8 +42,13 @@
 }
 
 - (IBAction)joinPressed:(id)sender {
-    [self.wrapper joinConferenceWithURL:@""];
+    [self.wrapper initiateConferenceWithURL:@""];
 }
+
+- (IBAction)guestPressed:(id)sender {
+    [self.wrapper joinRoomWithURL:@"https://video.ust-global.com" roomKey:@"LvJZe5NNlzrd" guestName:@"BugleTester"];
+}
+
 
 - (IBAction)clearPressed:(id)sender {
     self.textView.text = @"";
@@ -66,7 +67,7 @@
             self.textView.text = [NSString stringWithFormat:@"%@\n\n%@",self.textView.text,newValue];
             [self.textView scrollRangeToVisible:NSMakeRange([self.textView.text length], 0)];
         });
-    } else if ([keyPath isEqualToString:kVidyoIsSigningIn] || [keyPath isEqualToString:kVidyoClientStarted]) {
+    } else if ([keyPath isEqualToString:kVidyoIsSigningIn]) {
         __block BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.textView.text = [NSString stringWithFormat:@"%@\n\n%@ - %@",self.textView.text,keyPath,newValue?@"TRUE":@"FALSE"];
@@ -78,7 +79,6 @@
 -(void)dealloc {
     [self.wrapper removeObserver:self forKeyPath:kVidyoDynamicNotification];
     [self.wrapper removeObserver:self forKeyPath:kVidyoIsSigningIn];
-    [self.wrapper removeObserver:self forKeyPath:kVidyoClientStarted];
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  Project - VidyoIntegration
+//  Project - VidyoIntegration from Kony
 //
 //  Created by Deepu Mukundan on 09/04/14.
 //  Copyright (c) 2014 Deepu Mukundan. All rights reserved.
