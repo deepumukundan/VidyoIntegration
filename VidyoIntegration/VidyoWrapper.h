@@ -7,12 +7,17 @@
 
 @interface VidyoWrapper : NSObject
 
-// Public properties
+// Private properties
+@property (nonatomic, strong) UIAlertView *userAlert;
+
+// Public properties - Getters
 @property (nonatomic) BOOL isSigningIn;
 @property (nonatomic) BOOL isJoiningConference;
 @property (nonatomic) BOOL vidyoClientStarted;
 @property (nonatomic, strong) NSString *dynamicNotification;
-@property (nonatomic, strong) UIAlertView *userAlert;
+
+// Public properites - Setters
+@property (nonatomic) BOOL suppressAlerts;
 
 // Public methods
 + (id)sharedInstance;

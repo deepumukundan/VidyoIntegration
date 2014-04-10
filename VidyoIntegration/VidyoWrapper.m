@@ -52,27 +52,27 @@
         self.serverURL = @"http://dev20.vidyo.com";
         self.serverName = @"marina";
         self.serverPass = @"marina";
+        // self.suppressAlerts = YES;
         
         self.window = [[[UIApplication sharedApplication] delegate] window];
         
         // initialize Vidyo client
         [self clientInit];
+        // Add subcription for orientation change notifications
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(orientationDidChange:)
                                                      name:@"UIDeviceOrientationDidChangeNotification"
                                                    object:nil];
-
+        // Add subscription for application modes notifications
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(appDidBecomeActive)
                                                      name:@"UIApplicationDidBecomeActiveNotification"
                                                    object:nil];
-
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(appWillResignActive)
                                                      name:@"UIApplicationWillResignActiveNotification"
                                                    object:nil];
-
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(appWillTerminate)
                                                      name:@"UIApplicationWillTerminateNotification"
@@ -109,16 +109,8 @@
     // send login-event to VidyoClient
     self.webData = [NSMutableData data];
     if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) == false) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.userAlert dismissWithClickedButtonIndex:0 animated:YES];
-            NSString *alertMsg = [NSString stringWithFormat:@"Failed to sign in"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:alertMsg
-                                                            message:@""
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        });
+        [self dismissToastAlert];
+        [self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
     } else {
         // Sign in in progress
         self.isSigningIn = TRUE;
@@ -170,36 +162,59 @@
 	logMsg(@"****SENT SOAP Request myAccount()****");
 }
 
-
+#pragma mark - Alert Display Methods
 - (void)createToastAlertWithMessage:(NSString *)message {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.userAlert = [[UIAlertView alloc] initWithTitle:message
-                                                    message:nil
-                                                   delegate:self
-                                          cancelButtonTitle:nil
-                                          otherButtonTitles: nil];
-        [self.userAlert show];
-        
-        // Add an activity indicator view to show progress
-        self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        // Adjust the indicator so it is up a few pixels from the bottom of the alert
-        self.activityIndicator.center = CGPointMake(self.userAlert.bounds.size.width / 2,
-                                                    self.userAlert.bounds.size.height - 30);
-        self.activityIndicator.tintColor = [UIColor redColor];
-        [self.userAlert addSubview:self.activityIndicator];
-        [self.activityIndicator startAnimating];
-    });
+    if (!self.suppressAlerts) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.userAlert = [[UIAlertView alloc] initWithTitle:message
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles: nil];
+            // Add an activity indicator view to show progress
+            self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            // Adjust the indicator so it is up a few pixels from the bottom of the alert
+            self.activityIndicator.center = CGPointMake(self.userAlert.bounds.size.width / 2,
+                                                        self.userAlert.bounds.size.height / 2);
+            self.activityIndicator.tintColor = [UIColor redColor];
+            [self.userAlert addSubview:self.activityIndicator];
+            [self.activityIndicator startAnimating];
+            // Show the alert
+            [self.userAlert show];
+        });
+    }
+}
+
+- (void)createStandardAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
+    if (!self.suppressAlerts) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                            message:message
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        });
+    }
+}
+
+- (void)dismissToastAlert {
+    if (!self.suppressAlerts) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.userAlert dismissWithClickedButtonIndex:0 animated:YES];
+        });
+    }
 }
 
 #pragma mark - Notification Receivers
 - (void)appWillResignActive {
-	logMsg(@"Going to background");
+	logMsg(@"Going to Background");
 	VidyoUint error;
 	VidyoClientRequestSetBackground request = { 0 };
 	request.willBackground = VIDYO_TRUE;
 
 	if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_BACKGROUND, &request, sizeof(request))) != VIDYO_CLIENT_ERROR_OK) {
-		logMsg([NSString stringWithFormat:@"Problem going to background %d", error]);
+		logMsg([NSString stringWithFormat:@"Problem going to Background: %d", error]);
 	}
 	sleep(3);
 	self.didEverGoToBackground = YES;
@@ -210,14 +225,14 @@
 		/*
 		   Restart any tasks that were paused (or not yet started) while the application was inactive.
 		 */
-		logMsg(@"Going to foreground");
+		logMsg(@"Going to Foreground");
 
 		VidyoUint error;
 		VidyoClientRequestSetBackground request = { 0 };
 		request.willBackground = VIDYO_FALSE;
 
 		if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_BACKGROUND, &request, sizeof(request))) != VIDYO_CLIENT_ERROR_OK) {
-            logMsg([NSString stringWithFormat:@"problem going to foreground %d", error]);
+            logMsg([NSString stringWithFormat:@"Problem going to Foreground: %d", error]);
 		}
 	}
 }
@@ -369,6 +384,7 @@
 		goto FAIL;
 	}
 	else {
+        self.vidyoClientStarted = YES;
 		logMsg(@"VidyoClientStart() returned success!\n");
 	}
 	[self bootstrap];
@@ -421,8 +437,8 @@ FAIL:
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	logMsg([NSString stringWithFormat:@"DONE. Received Bytes: %d", [self.webData length]]);
-	NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes] length:[self.webData length] encoding:NSUTF8StringEncoding];
-	logMsg(theXML);
+//	NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes] length:[self.webData length] encoding:NSUTF8StringEncoding];
+//	logMsg(theXML);
 
 	self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
 	[self.xmlParser setDelegate:self];
@@ -464,9 +480,7 @@ FAIL:
 			logMsg(@"The Connection is NULL");
 		}
 		logMsg(@"**SENT SOAP Request joinConference()**");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.userAlert dismissWithClickedButtonIndex:0 animated:YES];
-        });
+        [self dismissToastAlert];
     }
 }
 
@@ -513,7 +527,7 @@ FAIL:
 - (NSString *)getElementFromElementName:(NSString *)elementName {
 	NSArray *split = [elementName componentsSeparatedByString:@":"];
 	if (!split || ([split count] != 2)) {
-		logMsg([NSString stringWithFormat:@"Not a valid elementName '%@'", elementName]);
+		logMsg([NSString stringWithFormat:@"Not a valid elementName: '%@'", elementName]);
 		return NULL;
 	}
 	NSString *element = [split objectAtIndex:1];
@@ -535,15 +549,7 @@ FAIL:
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
 			self.isJoiningConference = FALSE;
 			// Show an alert if user is not online
-			NSString *alertMsg = [NSString stringWithFormat:@"User not online. Make sure User is Logged In"];
-            dispatch_async(dispatch_get_main_queue(),^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:alertMsg
-                                                                message:@""
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            });
+			[self createStandardAlertWithTitle:@"User not online. Make sure user is Logged In" andMessage:@""];
 		}
 	}
 }

@@ -99,6 +99,7 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
             case VIDYO_CLIENT_OUT_EVENT_CONFERENCE_ACTIVE:
             {
                 /* TODO - Add logic for joining to a conference logic */
+                [wrapper setIsJoiningConference:FALSE];
                 notificationMsg = @"***** Conference is Active *****";
                 logMsg(notificationMsg);
                 break;
