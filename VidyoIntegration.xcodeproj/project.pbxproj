@@ -58,11 +58,8 @@
 		5542643018F0759200BE41F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642F18F0759200BE41F9 /* CFNetwork.framework */; };
 		5542643218F0759C00BE41F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643118F0759C00BE41F9 /* SystemConfiguration.framework */; };
 		5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
-		5542643F18F075C400BE41F9 /* VidyoClientLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643D18F075C400BE41F9 /* VidyoClientLib.a */; };
 		5542644A18F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */; };
-		5589901B18F641CE00125B34 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589901618F641CE00125B34 /* NSString+Base64.m */; };
-		5589901C18F641CE00125B34 /* VidyoEventBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589901818F641CE00125B34 /* VidyoEventBridge.m */; };
-		5589901D18F641CE00125B34 /* VidyoWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589901A18F641CE00125B34 /* VidyoWrapper.m */; };
+		5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +76,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 554263E818F0751800BE41F9;
 			remoteInfo = VidyoIntegration;
+		};
+		5572D01318F8358A00E1C4FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 554263E118F0751800BE41F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 553780AE18F7F16E00D6A070;
+			remoteInfo = VidyoWrapper;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -173,7 +177,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5542643F18F075C400BE41F9 /* VidyoClientLib.a in Frameworks */,
+				5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */,
 				5542643218F0759C00BE41F9 /* SystemConfiguration.framework in Frameworks */,
 				5542643018F0759200BE41F9 /* CFNetwork.framework in Frameworks */,
 				5542642E18F0758800BE41F9 /* AVFoundation.framework in Frameworks */,
@@ -419,6 +423,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5572D01418F8358A00E1C4FB /* PBXTargetDependency */,
 			);
 			name = VidyoIntegration;
 			productName = VidyoIntegration;
@@ -561,12 +566,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5589901B18F641CE00125B34 /* NSString+Base64.m in Sources */,
-				5589901C18F641CE00125B34 /* VidyoEventBridge.m in Sources */,
 				554263F918F0751800BE41F9 /* main.mm in Sources */,
 				5542640318F0751800BE41F9 /* DMViewController.m in Sources */,
 				554263FD18F0751800BE41F9 /* DMAppDelegate.m in Sources */,
-				5589901D18F641CE00125B34 /* VidyoWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +592,11 @@
 			isa = PBXTargetDependency;
 			target = 554263E818F0751800BE41F9 /* VidyoIntegration */;
 			targetProxy = 5542640F18F0751800BE41F9 /* PBXContainerItemProxy */;
+		};
+		5572D01418F8358A00E1C4FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 553780AE18F7F16E00D6A070 /* VidyoWrapper */;
+			targetProxy = 5572D01318F8358A00E1C4FB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
