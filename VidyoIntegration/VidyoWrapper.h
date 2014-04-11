@@ -20,9 +20,9 @@
 // Returns singleton instance of the class
 + (id)sharedInstance;
 // Suppress all UI notifications
-- (void)setSuppressAlerts:(BOOL)supress;
+- (void)suppressAlerts:(BOOL)supress;
 // Logs in a Vidyo member with password
-- (void)loginWithURL:(NSString *)url userName:(NSString *)userName password:(NSString *)password;
+- (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord;
 // Starts conference for a logged in member
 - (void)initiateConference;
 // Enter a room as guest

@@ -33,14 +33,14 @@
 	               forKeyPath:kVidyoIsSigningIn
 	                  options:NSKeyValueObservingOptionNew
 	                  context:NULL];
-    [self.wrapper setSuppressAlerts:YES];
+    [self.wrapper suppressAlerts:YES];
 	self.textView.text = @"Initialized Vidyo Library";
 }
 
 - (IBAction)loginPressed:(id)sender {
     [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
                       userName:@"marina"
-                      password:@"marina"];
+                      passWord:@"marina"];
 }
 
 - (IBAction)joinPressed:(id)sender {

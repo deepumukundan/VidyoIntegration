@@ -37,7 +37,7 @@
 @property (nonatomic, strong) NSString *currentUserName;
 @property (nonatomic, strong) NSString *currentUserPassword;
 @property (nonatomic) BOOL guestMode;
-@property (nonatomic) BOOL suppressAlerts;
+@property (nonatomic) BOOL alertSuppression;
 
 @end
 
@@ -140,7 +140,7 @@
 	logMsg(@"***SENT SOAP Request GuestJoin()***");
 }
 
-- (void)loginWithURL:(NSString *)url userName:(NSString *)userName password:(NSString *)password {
+- (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord {
 	// Reset for new operation
 	[self resetState];
     [self resetCredentials];
@@ -148,7 +148,7 @@
     // Capture parameters for further operations
     self.baseURL = url;
     self.currentUserName = userName;
-    self.currentUserPassword = password;
+    self.currentUserPassword = passWord;
     
 	// If portal URL does not start with schema than put it there explicetly
 	if (!([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"])) {
@@ -315,7 +315,7 @@ FAIL:
 
 #pragma mark - Alert Display Methods
 - (void)createToastAlertWithMessage:(NSString *)message {
-	if (!self.suppressAlerts) {
+	if (!self.alertSuppression) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 		    self.userAlert = [[UIAlertView alloc] initWithTitle:message
 		                                                message:nil
@@ -348,7 +348,7 @@ FAIL:
 }
 
 - (void)dismissToastAlert {
-	if (!self.suppressAlerts) {
+	if (!self.alertSuppression) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 		    [self.userAlert dismissWithClickedButtonIndex:0 animated:YES];
 		});
@@ -632,6 +632,10 @@ FAIL:
     self.baseURL = nil;
     self.currentUserName = nil;
     self.currentUserPassword = nil;
+}
+
+- (void)suppressAlerts:(BOOL)supress {
+    self.alertSuppression = supress;
 }
 
 - (NSMutableURLRequest *)createURLRequestWithURL:(NSString *)baseURL
