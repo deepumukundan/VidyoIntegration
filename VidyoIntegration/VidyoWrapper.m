@@ -58,10 +58,10 @@
 	if (self = [super init]) {
 		self.didEverGoToBackground = NO;
 		self.window = [[[UIApplication sharedApplication] delegate] window];
-        
+
 		// initialize Vidyo client
 		[self clientInit];
-        
+
 		// Add subcription for orientation change notifications
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -88,22 +88,22 @@
 - (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName {
 	// Reset for new operation
 	[self resetState];
-    [self resetCredentials];
-    
-    // Capture parameters for further operations
-    self.baseURL = url;
-    self.currentUserName = guestName;
-	
-    // Activate guest mode
+	[self resetCredentials];
+
+	// Capture parameters for further operations
+	self.baseURL = url;
+	self.currentUserName = guestName;
+
+	// Activate guest mode
 	self.guestMode = YES;
-	
-    // Activate joining status flag
+
+	// Activate joining status flag
 	self.isJoiningConference = TRUE;
-	
-    // Create and show a wait alert
+
+	// Create and show a wait alert
 	[self createToastAlertWithMessage:@"Joining Conference\nPlease Wait..."];
-	
-    // Create a web request and start it
+
+	// Create a web request and start it
 	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
 	                         "<env:Body>"
@@ -122,11 +122,11 @@
 - (void)joinRoomAsGuest {
 	// De-Activate joining status flag
 	self.isJoiningConference = FALSE;
-	
-    // Dismiss the joining conference toast message
+
+	// Dismiss the joining conference toast message
 	[self dismissToastAlert];
-	
-    // Create a web request and start it
+
+	// Create a web request and start it
 	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:gues=\"http://portal.vidyo.com/guest\">"
 	                         "<env:Body>" "<gues:GuestJoinConferenceRequest>"
@@ -143,27 +143,27 @@
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord {
 	// Reset for new operation
 	[self resetState];
-    [self resetCredentials];
-    
-    // Capture parameters for further operations
-    self.baseURL = url;
-    self.currentUserName = userName;
-    self.currentUserPassword = passWord;
-    
+	[self resetCredentials];
+
+	// Capture parameters for further operations
+	self.baseURL = url;
+	self.currentUserName = userName;
+	self.currentUserPassword = passWord;
+
 	// If portal URL does not start with schema than put it there explicetly
 	if (!([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"])) {
 		url = [NSString stringWithFormat:@"http://%@", url];
 	}
-    
+
 	// Initaite the local sign in process
 	VidyoClientInEventLogIn event = { 0 };
 	strlcpy(event.portalUri, [self.baseURL UTF8String], sizeof(event.portalUri));
 	strlcpy(event.userName, [self.currentUserName UTF8String], sizeof(event.userName));
 	strlcpy(event.userPass, [self.currentUserPassword UTF8String], sizeof(event.userPass));
-    
+
 	/* Create and show a wait alert */
 	[self createToastAlertWithMessage:@"Signing in\nPlease Wait..."];
-    
+
 	// send login-event to VidyoClient
 	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) == false) {
 		[self dismissToastAlert];
@@ -231,35 +231,35 @@
 	// check if this method already previously entered
 	if (self.vidyoClientStarted)
 		return;
-    
+
 	// configure console logging
 	VidyoClientConsoleLogConfigure(VIDYO_CLIENT_CONSOLE_LOG_CONFIGURATION_ALL);
-    
+
 	// determine video rectangle, from geometry of main window, assuming portrait right-side up orientation
 	VidyoRect videoRect
-    = { (VidyoInt)(self.window.frame.origin.x), (VidyoInt)(self.window.frame.origin.y),
-        (VidyoUint)(self.window.frame.size.width), (VidyoUint)(self.window.frame.size.height) };
-    
+	    = { (VidyoInt)(self.window.frame.origin.x), (VidyoInt)(self.window.frame.origin.y),
+		    (VidyoUint)(self.window.frame.size.width), (VidyoUint)(self.window.frame.size.height) };
+
 	// determine path, default base filename, and levels and categories, used for logging
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	documentsDirectory = [documentsDirectory stringByAppendingString:@"/"];
 	const char *pathToLogDir = [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding];
-    
+
 	VidyoClientLogParams logParams = { 0 };
-    
+
 	logParams.logBaseFileName = "VidyoSample_";
 	logParams.pathToLogDir = pathToLogDir;
 	logParams.logLevelsAndCategories = "warning info@AppGui info@App info@AppEmcpClient info@LmiApp";
-    
-    
+
+
 	if (VidyoClientInitialize(vidyoClientWrapperOnVidyoClientEvent, (__bridge VidyoVoidPtr)(self), &logParams) == VIDYO_FALSE) {
 		logMsg(@"VidyoClientInit() returned failure!\n");
 		goto FAIL;
 	}
-    
+
 	VidyoClientProfileParams profileParams = { 0 };
-    
+
 	// startup VidyoClient library
 	ret = VidyoClientStart(vidyoClientWrapperOnVidyoClientEvent,
 	                       (__bridge VidyoVoidPtr)(self),
@@ -269,7 +269,7 @@
 	                       NULL,
 	                       &profileParams,
 	                       VIDYO_FALSE);
-    
+
 	if (!ret) {
 		logMsg(@"VidyoClientStart() returned failure!\n");
 		goto FAIL;
@@ -279,10 +279,10 @@
 		logMsg(@"VidyoClientStart() returned success!\n");
 	}
 	[self bootstrap];
-    
+
 	logMsg(@"Initiliazed Vidyo Libraries");
 	return;
-    
+
 	// cleanup on failure, exiting program
 FAIL:
 	/* [[UIApplication sharedApplication] terminate:self] */;
@@ -501,13 +501,13 @@ FAIL:
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	logMsg([NSString stringWithFormat:@"DONE. Received Bytes: %lu", (unsigned long)[self.webData length]]);
+	logMsg([NSString stringWithFormat:@"Done. Received Bytes: %lu", (unsigned long)[self.webData length]]);
 
-    /* NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
-                                                length:[self.webData length]
-                                              encoding:NSUTF8StringEncoding];
-	logMsg(theXML); */
-    
+	/* NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
+	                                            length:[self.webData length]
+	                                          encoding:NSUTF8StringEncoding];
+	   logMsg(theXML); */
+
 	self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
 	self.webData = nil;
 	[self.xmlParser setDelegate:self];
@@ -617,25 +617,25 @@ FAIL:
 }
 
 - (void)resetState {
-    self.isSigningIn = FALSE;
+	self.isSigningIn = FALSE;
 	self.isJoiningConference = FALSE;
 	self.entityIDResult = FALSE;
-    self.memberStatusResult = FALSE;
-    self.guestIDResult = FALSE;
-    self.vidyoEntityID = nil;
+	self.memberStatusResult = FALSE;
+	self.guestIDResult = FALSE;
+	self.vidyoEntityID = nil;
 	self.vidyoMemberStatus = nil;
-    self.vidyoGuestID = nil;
-    self.vidyoGuestResponse = nil;
+	self.vidyoGuestID = nil;
+	self.vidyoGuestResponse = nil;
 }
 
 - (void)resetCredentials {
-    self.baseURL = nil;
-    self.currentUserName = nil;
-    self.currentUserPassword = nil;
+	self.baseURL = nil;
+	self.currentUserName = nil;
+	self.currentUserPassword = nil;
 }
 
 - (void)suppressAlerts:(BOOL)supress {
-    self.alertSuppression = supress;
+	self.alertSuppression = supress;
 }
 
 - (NSMutableURLRequest *)createURLRequestWithURL:(NSString *)baseURL

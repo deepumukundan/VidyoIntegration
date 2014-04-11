@@ -150,8 +150,7 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 		}
 	}
 	else {
-		notificationMsg = [NSString stringWithFormat:@"Unknown event %d", event];
-		logMsg(notificationMsg);
+		NSLog(@"%@", [NSString stringWithFormat:@"Unknown event %d", event]);
 	}
 }
 
