@@ -33,20 +33,27 @@
 	               forKeyPath:kVidyoIsSigningIn
 	                  options:NSKeyValueObservingOptionNew
 	                  context:NULL];
+    [self.wrapper setSuppressAlerts:YES];
 	self.textView.text = @"Initialized Vidyo Library";
 }
 
 - (IBAction)loginPressed:(id)sender {
-	[self.wrapper loginWithURL:@"http://dev20.vidyo.com" userName:@"marina" password:@"marina"];
+    [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
+                      userName:@"marina"
+                      password:@"marina"];
 }
 
 - (IBAction)joinPressed:(id)sender {
-	[self.wrapper initiateConferenceWithURL:@"http://dev20.vidyo.com"];
+	[self.wrapper initiateConference];
 }
 
 - (IBAction)guestPressed:(id)sender {
-	// [self.wrapper joinRoomAsGuestWithURL:@"https://video.ust-global.com" roomKey:@"LvJZe5NNlzrd" guestName:@"GreenBot"];
-    [self.wrapper joinRoomAsGuestWithURL:@"http://dev20.vidyo.com" roomKey:@"svXhf7He5RQU" guestName:@"YellowBot"];
+//	[self.wrapper joinRoomAsGuestWithURL:@"https://video.ust-global.com"
+//                                 roomKey:@"LvJZe5NNlzrd"
+//                               guestName:@"GreenBot"];
+    [self.wrapper joinRoomAsGuestWithURL:@"http://dev20.vidyo.com"
+                                 roomKey:@"svXhf7He5RQU"
+                               guestName:@"YellowBot"];
 }
 
 - (IBAction)clearPressed:(id)sender {

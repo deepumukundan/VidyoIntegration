@@ -16,17 +16,15 @@
 // Watch this property to get continuous logging messages back from the Vidyo subsystem
 @property (nonatomic, strong) NSString *dynamicNotification;
 
-#pragma mark - Public Setters
-// Suppress all UI notifications
-@property (nonatomic) BOOL suppressAlerts;
-
 #pragma mark - Public Method Calls
 // Returns singleton instance of the class
 + (id)sharedInstance;
-// Enter a room as guest
-- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName;
+// Suppress all UI notifications
+- (void)setSuppressAlerts:(BOOL)supress;
 // Logs in a Vidyo member with password
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName password:(NSString *)password;
 // Starts conference for a logged in member
-- (void)initiateConferenceWithURL:(NSString *)baseURL;
+- (void)initiateConference;
+// Enter a room as guest
+- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName;
 @end

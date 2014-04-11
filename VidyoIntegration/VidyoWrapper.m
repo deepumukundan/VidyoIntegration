@@ -37,6 +37,7 @@
 @property (nonatomic, strong) NSString *currentUserName;
 @property (nonatomic, strong) NSString *currentUserPassword;
 @property (nonatomic) BOOL guestMode;
+@property (nonatomic) BOOL suppressAlerts;
 
 @end
 
@@ -174,13 +175,9 @@
 	}
 }
 
-- (void)initiateConferenceWithURL:(NSString *)baseURL {
+- (void)initiateConference {
 	// Reset for new operation
 	[self resetState];
-
-    // Capture parameters for further operations
-    self.baseURL = baseURL;
-
 	// Signin using credentials so turning off guest mode
 	self.guestMode = NO;
 	// Activate joining status flag
@@ -506,10 +503,10 @@ FAIL:
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	logMsg([NSString stringWithFormat:@"DONE. Received Bytes: %d", [self.webData length]]);
 
-    NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
+    /* NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
                                                 length:[self.webData length]
                                               encoding:NSUTF8StringEncoding];
-	logMsg(theXML);
+	logMsg(theXML); */
     
 	self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
 	self.webData = nil;
