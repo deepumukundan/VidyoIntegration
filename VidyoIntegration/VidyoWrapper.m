@@ -501,7 +501,7 @@ FAIL:
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	logMsg([NSString stringWithFormat:@"DONE. Received Bytes: %d", [self.webData length]]);
+	logMsg([NSString stringWithFormat:@"DONE. Received Bytes: %lu", (unsigned long)[self.webData length]]);
 
     /* NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
                                                 length:[self.webData length]
@@ -654,7 +654,7 @@ FAIL:
 	NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
 
 	// Add basic requirements for all requests
-	NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
+	NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
 	[urlRequest addValue:@"application/soap+xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 	[urlRequest addValue:soapAction forHTTPHeaderField:@"SOAPAction"];
 	[urlRequest addValue:msgLength forHTTPHeaderField:@"Content-Length"];

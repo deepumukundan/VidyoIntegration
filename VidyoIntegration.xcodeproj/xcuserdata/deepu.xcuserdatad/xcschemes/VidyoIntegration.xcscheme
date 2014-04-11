@@ -38,6 +38,16 @@
                ReferencedContainer = "container:VidyoIntegration.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "553780BB18F7F16F00D6A070"
+               BuildableName = "VidyoWrapperTests.xctest"
+               BlueprintName = "VidyoWrapperTests"
+               ReferencedContainer = "container:VidyoIntegration.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

@@ -4,14 +4,39 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>UniversalLib.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>VidyoIntegration.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>VidyoWrapper.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>553780AE18F7F16E00D6A070</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>553780BB18F7F16F00D6A070</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>553780D418F7F1D900D6A070</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>554263E818F0751800BE41F9</key>
 		<dict>
 			<key>primary</key>
