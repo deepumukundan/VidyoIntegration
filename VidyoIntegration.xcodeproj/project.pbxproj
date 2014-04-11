@@ -97,7 +97,7 @@
 
 /* Begin PBXFileReference section */
 		553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVidyoWrapper.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		553780B318F7F16F00D6A070 /* VidyoWrapper-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VidyoWrapper-Prefix.pch"; sourceTree = "<group>"; };
+		553780B318F7F16F00D6A070 /* VidyoWrapper-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "VidyoWrapper-Prefix.pch"; path = "../VidyoWrapper/VidyoWrapper-Prefix.pch"; sourceTree = "<group>"; };
 		553780BC18F7F16F00D6A070 /* VidyoWrapperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VidyoWrapperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		553780C518F7F16F00D6A070 /* VidyoWrapperTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VidyoWrapperTests-Info.plist"; sourceTree = "<group>"; };
 		553780C718F7F16F00D6A070 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -202,22 +202,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		553780B118F7F16F00D6A070 /* VidyoWrapper */ = {
-			isa = PBXGroup;
-			children = (
-				553780B218F7F16F00D6A070 /* Supporting Files */,
-			);
-			path = VidyoWrapper;
-			sourceTree = "<group>";
-		};
-		553780B218F7F16F00D6A070 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				553780B318F7F16F00D6A070 /* VidyoWrapper-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		553780C318F7F16F00D6A070 /* VidyoWrapperTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,14 +223,12 @@
 		554263E018F0751800BE41F9 = {
 			isa = PBXGroup;
 			children = (
-				5573098318F13A57005FEBB0 /* Wrapper */,
 				5542643318F075C400BE41F9 /* VidyoClientLibrary */,
+				5573098318F13A57005FEBB0 /* Wrapper */,
 				554263F218F0751800BE41F9 /* VidyoIntegration */,
-				5542641118F0751800BE41F9 /* VidyoIntegrationTests */,
-				553780B118F7F16F00D6A070 /* VidyoWrapper */,
-				553780C318F7F16F00D6A070 /* VidyoWrapperTests */,
 				554263EB18F0751800BE41F9 /* Frameworks */,
 				554263EA18F0751800BE41F9 /* Products */,
+				5572D01118F82C5200E1C4FB /* Tests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -264,17 +246,17 @@
 		554263EB18F0751800BE41F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5542643118F0759C00BE41F9 /* SystemConfiguration.framework */,
-				5542642F18F0759200BE41F9 /* CFNetwork.framework */,
+				5542642518F0755200BE41F9 /* AudioToolbox.framework */,
 				5542642D18F0758800BE41F9 /* AVFoundation.framework */,
+				5542642F18F0759200BE41F9 /* CFNetwork.framework */,
+				554263EE18F0751800BE41F9 /* CoreGraphics.framework */,
 				5542642B18F0757A00BE41F9 /* CoreMedia.framework */,
 				5542642918F0756A00BE41F9 /* CoreVideo.framework */,
-				5542642718F0755A00BE41F9 /* QuartzCore.framework */,
-				5542642518F0755200BE41F9 /* AudioToolbox.framework */,
-				5542642318F0754B00BE41F9 /* OpenGLES.framework */,
-				5542642118F0753900BE41F9 /* Security.framework */,
 				554263EC18F0751800BE41F9 /* Foundation.framework */,
-				554263EE18F0751800BE41F9 /* CoreGraphics.framework */,
+				5542642318F0754B00BE41F9 /* OpenGLES.framework */,
+				5542642718F0755A00BE41F9 /* QuartzCore.framework */,
+				5542642118F0753900BE41F9 /* Security.framework */,
+				5542643118F0759C00BE41F9 /* SystemConfiguration.framework */,
 				554263F018F0751800BE41F9 /* UIKit.framework */,
 				5542640B18F0751800BE41F9 /* XCTest.framework */,
 			);
@@ -286,10 +268,10 @@
 			children = (
 				554263FB18F0751800BE41F9 /* DMAppDelegate.h */,
 				554263FC18F0751800BE41F9 /* DMAppDelegate.m */,
-				554263FE18F0751800BE41F9 /* Main.storyboard */,
 				5542640118F0751800BE41F9 /* DMViewController.h */,
 				5542640218F0751800BE41F9 /* DMViewController.m */,
 				5542640418F0751800BE41F9 /* Images.xcassets */,
+				554263FE18F0751800BE41F9 /* Main.storyboard */,
 				554263F318F0751800BE41F9 /* Supporting Files */,
 			);
 			path = VidyoIntegration;
@@ -298,10 +280,11 @@
 		554263F318F0751800BE41F9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				554263F418F0751800BE41F9 /* VidyoIntegration-Info.plist */,
 				554263F518F0751800BE41F9 /* InfoPlist.strings */,
 				554263F818F0751800BE41F9 /* main.mm */,
+				554263F418F0751800BE41F9 /* VidyoIntegration-Info.plist */,
 				554263FA18F0751800BE41F9 /* VidyoIntegration-Prefix.pch */,
+				553780B318F7F16F00D6A070 /* VidyoWrapper-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -362,17 +345,26 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
+		5572D01118F82C5200E1C4FB /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				553780C318F7F16F00D6A070 /* VidyoWrapperTests */,
+				5542641118F0751800BE41F9 /* VidyoIntegrationTests */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
 		5573098318F13A57005FEBB0 /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */,
 				5589901518F641CE00125B34 /* NSString+Base64.h */,
 				5589901618F641CE00125B34 /* NSString+Base64.m */,
+				5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */,
+				557E2A0C18F1AF24000140D1 /* VidyoConstants.h */,
 				5589901718F641CE00125B34 /* VidyoEventBridge.h */,
 				5589901818F641CE00125B34 /* VidyoEventBridge.m */,
 				5589901918F641CE00125B34 /* VidyoWrapper.h */,
 				5589901A18F641CE00125B34 /* VidyoWrapper.m */,
-				557E2A0C18F1AF24000140D1 /* VidyoConstants.h */,
 			);
 			name = Wrapper;
 			path = VidyoIntegration;
@@ -926,6 +918,7 @@
 				553780CC18F7F16F00D6A070 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		553780D018F7F16F00D6A070 /* Build configuration list for PBXNativeTarget "VidyoWrapperTests" */ = {
 			isa = XCConfigurationList;
@@ -934,6 +927,7 @@
 				553780CE18F7F16F00D6A070 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		553780D518F7F1D900D6A070 /* Build configuration list for PBXAggregateTarget "UniversalLib" */ = {
 			isa = XCConfigurationList;
@@ -942,6 +936,7 @@
 				553780D718F7F1D900D6A070 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		554263E418F0751800BE41F9 /* Build configuration list for PBXProject "VidyoIntegration" */ = {
 			isa = XCConfigurationList;
