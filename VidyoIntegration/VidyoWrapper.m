@@ -634,8 +634,8 @@ FAIL:
 	self.currentUserPassword = nil;
 }
 
-- (void)suppressAlerts:(BOOL)supress {
-	self.alertSuppression = supress;
+- (void)suppressAlerts:(BOOL)suppress {
+	self.alertSuppression = suppress;
 }
 
 - (NSMutableURLRequest *)createURLRequestWithURL:(NSString *)baseURL
