@@ -28,12 +28,8 @@
 		553780C218F7F16F00D6A070 /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
 		553780C818F7F16F00D6A070 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 553780C618F7F16F00D6A070 /* InfoPlist.strings */; };
 		553780CA18F7F16F00D6A070 /* VidyoWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 553780C918F7F16F00D6A070 /* VidyoWrapperTests.m */; };
-		553780D118F7F1B300D6A070 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589901618F641CE00125B34 /* NSString+Base64.m */; };
-		553780D218F7F1B300D6A070 /* VidyoEventBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589901818F641CE00125B34 /* VidyoEventBridge.m */; };
 		553780D918F7F3ED00D6A070 /* VidyoClientLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643D18F075C400BE41F9 /* VidyoClientLib.a */; };
 		553780DA18F7F47F00D6A070 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263F018F0751800BE41F9 /* UIKit.framework */; };
-		553780DB18F7F87700D6A070 /* VidyoWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589901A18F641CE00125B34 /* VidyoWrapper.m */; };
-		553780DC18F7FC8E00D6A070 /* VidyoWrapper.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5589901918F641CE00125B34 /* VidyoWrapper.h */; };
 		554263ED18F0751800BE41F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263EC18F0751800BE41F9 /* Foundation.framework */; };
 		554263EF18F0751800BE41F9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263EE18F0751800BE41F9 /* CoreGraphics.framework */; };
 		554263F118F0751800BE41F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263F018F0751800BE41F9 /* UIKit.framework */; };
@@ -58,10 +54,13 @@
 		5542643018F0759200BE41F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642F18F0759200BE41F9 /* CFNetwork.framework */; };
 		5542643218F0759C00BE41F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643118F0759C00BE41F9 /* SystemConfiguration.framework */; };
 		5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
-		5542644A18F0793F00BE41F9 /* VidyoWrapper.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */; };
 		554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
-		554534CF18F903B800FFA3F5 /* VidyoWrapper.entitlements in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */; };
 		5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
+		55B0D84C18F95AC000B764D4 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84518F95AC000B764D4 /* NSString+Base64.m */; };
+		55B0D84D18F95AC000B764D4 /* VidyoEventBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */; };
+		55B0D84E18F95AC000B764D4 /* VidyoWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */; };
+		55B0D85418F95CDF00B764D4 /* VidyoWrapper.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 55B0D85318F95CDF00B764D4 /* VidyoWrapper.entitlements */; };
+		55B0D85518F95DB200B764D4 /* VidyoWrapper.entitlements in CopyFiles */ = {isa = PBXBuildFile; fileRef = 55B0D85318F95CDF00B764D4 /* VidyoWrapper.entitlements */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,9 +94,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				55B0D85518F95DB200B764D4 /* VidyoWrapper.entitlements in CopyFiles */,
 				554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */,
-				554534CF18F903B800FFA3F5 /* VidyoWrapper.entitlements in CopyFiles */,
-				553780DC18F7FC8E00D6A070 /* VidyoWrapper.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +103,6 @@
 
 /* Begin PBXFileReference section */
 		553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVidyoWrapper.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		553780B318F7F16F00D6A070 /* VidyoWrapper-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "VidyoWrapper-Prefix.pch"; path = "../VidyoWrapper/VidyoWrapper-Prefix.pch"; sourceTree = "<group>"; };
 		553780BC18F7F16F00D6A070 /* VidyoWrapperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VidyoWrapperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		553780C518F7F16F00D6A070 /* VidyoWrapperTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VidyoWrapperTests-Info.plist"; sourceTree = "<group>"; };
 		553780C718F7F16F00D6A070 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -145,14 +142,15 @@
 		5542643A18F075C400BE41F9 /* VidyoClientParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoClientParameters.h; sourceTree = "<group>"; };
 		5542643B18F075C400BE41F9 /* VidyoTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoTypes.h; sourceTree = "<group>"; };
 		5542643D18F075C400BE41F9 /* VidyoClientLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = VidyoClientLib.a; sourceTree = "<group>"; };
-		5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = VidyoWrapper.entitlements; path = ../VidyoWrapper.entitlements; sourceTree = "<group>"; };
-		557E2A0C18F1AF24000140D1 /* VidyoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoConstants.h; sourceTree = "<group>"; };
-		5589901518F641CE00125B34 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
-		5589901618F641CE00125B34 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
-		5589901718F641CE00125B34 /* VidyoEventBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoEventBridge.h; sourceTree = "<group>"; };
-		5589901818F641CE00125B34 /* VidyoEventBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VidyoEventBridge.m; sourceTree = "<group>"; };
-		5589901918F641CE00125B34 /* VidyoWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoWrapper.h; sourceTree = "<group>"; };
-		5589901A18F641CE00125B34 /* VidyoWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VidyoWrapper.m; sourceTree = "<group>"; };
+		55B0D84418F95AC000B764D4 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "VidyoWrapper/NSString+Base64.h"; sourceTree = SOURCE_ROOT; };
+		55B0D84518F95AC000B764D4 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "VidyoWrapper/NSString+Base64.m"; sourceTree = SOURCE_ROOT; };
+		55B0D84618F95AC000B764D4 /* VidyoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidyoConstants.h; path = VidyoWrapper/VidyoConstants.h; sourceTree = SOURCE_ROOT; };
+		55B0D84718F95AC000B764D4 /* VidyoEventBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidyoEventBridge.h; path = VidyoWrapper/VidyoEventBridge.h; sourceTree = SOURCE_ROOT; };
+		55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VidyoEventBridge.m; path = VidyoWrapper/VidyoEventBridge.m; sourceTree = SOURCE_ROOT; };
+		55B0D84A18F95AC000B764D4 /* VidyoWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidyoWrapper.h; path = VidyoWrapper/VidyoWrapper.h; sourceTree = SOURCE_ROOT; };
+		55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VidyoWrapper.m; path = VidyoWrapper/VidyoWrapper.m; sourceTree = SOURCE_ROOT; };
+		55B0D84F18F95AFB00B764D4 /* VidyoWrapper-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "VidyoWrapper-Prefix.pch"; path = "VidyoWrapper/VidyoWrapper-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		55B0D85318F95CDF00B764D4 /* VidyoWrapper.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = VidyoWrapper.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,7 +290,6 @@
 				554263F818F0751800BE41F9 /* main.mm */,
 				554263F418F0751800BE41F9 /* VidyoIntegration-Info.plist */,
 				554263FA18F0751800BE41F9 /* VidyoIntegration-Prefix.pch */,
-				553780B318F7F16F00D6A070 /* VidyoWrapper-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -365,14 +362,15 @@
 		5573098318F13A57005FEBB0 /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				5589901518F641CE00125B34 /* NSString+Base64.h */,
-				5589901618F641CE00125B34 /* NSString+Base64.m */,
-				5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */,
-				557E2A0C18F1AF24000140D1 /* VidyoConstants.h */,
-				5589901718F641CE00125B34 /* VidyoEventBridge.h */,
-				5589901818F641CE00125B34 /* VidyoEventBridge.m */,
-				5589901918F641CE00125B34 /* VidyoWrapper.h */,
-				5589901A18F641CE00125B34 /* VidyoWrapper.m */,
+				55B0D85318F95CDF00B764D4 /* VidyoWrapper.entitlements */,
+				55B0D84418F95AC000B764D4 /* NSString+Base64.h */,
+				55B0D84518F95AC000B764D4 /* NSString+Base64.m */,
+				55B0D84618F95AC000B764D4 /* VidyoConstants.h */,
+				55B0D84718F95AC000B764D4 /* VidyoEventBridge.h */,
+				55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */,
+				55B0D84F18F95AFB00B764D4 /* VidyoWrapper-Prefix.pch */,
+				55B0D84A18F95AC000B764D4 /* VidyoWrapper.h */,
+				55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */,
 			);
 			name = Wrapper;
 			path = VidyoIntegration;
@@ -471,6 +469,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 					5542640918F0751800BE41F9 = {
@@ -513,9 +514,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55B0D85418F95CDF00B764D4 /* VidyoWrapper.entitlements in Resources */,
 				5542640518F0751800BE41F9 /* Images.xcassets in Resources */,
 				554263F718F0751800BE41F9 /* InfoPlist.strings in Resources */,
-				5542644A18F0793F00BE41F9 /* VidyoWrapper.entitlements in Resources */,
 				5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */,
 				5542640018F0751800BE41F9 /* Main.storyboard in Resources */,
 			);
@@ -552,9 +553,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				553780DB18F7F87700D6A070 /* VidyoWrapper.m in Sources */,
-				553780D118F7F1B300D6A070 /* NSString+Base64.m in Sources */,
-				553780D218F7F1B300D6A070 /* VidyoEventBridge.m in Sources */,
+				55B0D84C18F95AC000B764D4 /* NSString+Base64.m in Sources */,
+				55B0D84D18F95AC000B764D4 /* VidyoEventBridge.m in Sources */,
+				55B0D84E18F95AC000B764D4 /* VidyoWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -643,6 +644,7 @@
 		553780CB18F7F16F00D6A070 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper/VidyoWrapper.entitlements;
 				DSTROOT = /tmp/VidyoWrapper.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VidyoWrapper/VidyoWrapper-Prefix.pch";
@@ -665,6 +667,7 @@
 		553780CC18F7F16F00D6A070 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper/VidyoWrapper.entitlements;
 				DSTROOT = /tmp/VidyoWrapper.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VidyoWrapper/VidyoWrapper-Prefix.pch";
@@ -684,6 +687,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/VidyoIntegration.app/VidyoIntegration";
+				CODE_SIGN_ENTITLEMENTS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -706,6 +710,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/VidyoIntegration.app/VidyoIntegration";
+				CODE_SIGN_ENTITLEMENTS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -723,6 +728,7 @@
 		553780D618F7F1D900D6A070 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -730,6 +736,7 @@
 		553780D718F7F1D900D6A070 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -818,7 +825,7 @@
 				CLANG_ENABLE_MODULES = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_EMPTY_BODY = NO;
-				CODE_SIGN_ENTITLEMENTS = VidyoWrapper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper/VidyoWrapper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -855,7 +862,7 @@
 				CLANG_ENABLE_MODULES = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_EMPTY_BODY = NO;
-				CODE_SIGN_ENTITLEMENTS = VidyoWrapper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper/VidyoWrapper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -886,6 +893,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/VidyoIntegration.app/VidyoIntegration";
+				CODE_SIGN_ENTITLEMENTS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -908,6 +916,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/VidyoIntegration.app/VidyoIntegration";
+				CODE_SIGN_ENTITLEMENTS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
