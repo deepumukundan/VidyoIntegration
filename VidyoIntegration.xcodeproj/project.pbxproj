@@ -58,7 +58,9 @@
 		5542643018F0759200BE41F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642F18F0759200BE41F9 /* CFNetwork.framework */; };
 		5542643218F0759C00BE41F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643118F0759C00BE41F9 /* SystemConfiguration.framework */; };
 		5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
-		5542644A18F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */; };
+		5542644A18F0793F00BE41F9 /* VidyoWrapper.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */; };
+		554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
+		554534CF18F903B800FFA3F5 /* VidyoWrapper.entitlements in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */; };
 		5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +95,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */,
+				554534CF18F903B800FFA3F5 /* VidyoWrapper.entitlements in CopyFiles */,
 				553780DC18F7FC8E00D6A070 /* VidyoWrapper.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,7 +145,7 @@
 		5542643A18F075C400BE41F9 /* VidyoClientParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoClientParameters.h; sourceTree = "<group>"; };
 		5542643B18F075C400BE41F9 /* VidyoTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoTypes.h; sourceTree = "<group>"; };
 		5542643D18F075C400BE41F9 /* VidyoClientLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = VidyoClientLib.a; sourceTree = "<group>"; };
-		5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = VidyoClientSample_iOS.entitlements; path = ../VidyoClientSample_iOS.entitlements; sourceTree = "<group>"; };
+		5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = VidyoWrapper.entitlements; path = ../VidyoWrapper.entitlements; sourceTree = "<group>"; };
 		557E2A0C18F1AF24000140D1 /* VidyoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoConstants.h; sourceTree = "<group>"; };
 		5589901518F641CE00125B34 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
 		5589901618F641CE00125B34 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
@@ -363,7 +367,7 @@
 			children = (
 				5589901518F641CE00125B34 /* NSString+Base64.h */,
 				5589901618F641CE00125B34 /* NSString+Base64.m */,
-				5542644918F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements */,
+				5542644918F0793F00BE41F9 /* VidyoWrapper.entitlements */,
 				557E2A0C18F1AF24000140D1 /* VidyoConstants.h */,
 				5589901718F641CE00125B34 /* VidyoEventBridge.h */,
 				5589901818F641CE00125B34 /* VidyoEventBridge.m */,
@@ -511,7 +515,7 @@
 			files = (
 				5542640518F0751800BE41F9 /* Images.xcassets in Resources */,
 				554263F718F0751800BE41F9 /* InfoPlist.strings in Resources */,
-				5542644A18F0793F00BE41F9 /* VidyoClientSample_iOS.entitlements in Resources */,
+				5542644A18F0793F00BE41F9 /* VidyoWrapper.entitlements in Resources */,
 				5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */,
 				5542640018F0751800BE41F9 /* Main.storyboard in Resources */,
 			);
@@ -746,6 +750,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -784,6 +789,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -812,7 +818,7 @@
 				CLANG_ENABLE_MODULES = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_EMPTY_BODY = NO;
-				CODE_SIGN_ENTITLEMENTS = VidyoClientSample_iOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -849,7 +855,7 @@
 				CLANG_ENABLE_MODULES = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_EMPTY_BODY = NO;
-				CODE_SIGN_ENTITLEMENTS = VidyoClientSample_iOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = VidyoWrapper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

@@ -5,7 +5,7 @@
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)VidyoLicense</string>
-		<string>$(AppIdentifierPrefix)com.vidyo.VidyoIntegration</string>
+		<string>$(AppIdentifierPrefix)com.vidyo.VidyoWrapper</string>
 	</array>
 </dict>
 </plist>

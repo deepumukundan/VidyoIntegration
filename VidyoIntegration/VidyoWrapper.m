@@ -1,5 +1,5 @@
 //
-//  Vidyo Integration from Kony
+//  Vidyo Integration 
 //
 //  Created by Deepu Mukundan on 09/04/14.
 //  Copyright (c) 2014 Deepu Mukundan. All rights reserved.
@@ -10,7 +10,6 @@
 #import "NSString+Base64.h"
 #import "VidyoWrapper.h"
 #import "VidyoEventBridge.h"
-
 
 #pragma mark - Private Interface
 @interface VidyoWrapper () <NSXMLParserDelegate, UIAlertViewDelegate>
@@ -115,6 +114,7 @@
 	                         "</env:Envelope>", roomKey, guestName];
 	self.webRequest = [self createURLRequestWithURL:url soapMessage:soapMessage soapAction:@"LogInAsGuest"];
 	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
+
 	if (!self.webConnection) logMsg(@"The Connection is NULL");
 	logMsg(@"***SENT SOAP Request Guest()***");
 }
@@ -136,6 +136,7 @@
 	                                    soapMessage:soapMessage
 	                                     soapAction:@"GuestJoinConference"];
 	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
+
 	if (!self.webConnection) logMsg(@"The Connection is NULL");
 	logMsg(@"***SENT SOAP Request GuestJoin()***");
 }
@@ -161,7 +162,7 @@
 	strlcpy(event.userName, [self.currentUserName UTF8String], sizeof(event.userName));
 	strlcpy(event.userPass, [self.currentUserPassword UTF8String], sizeof(event.userPass));
 
-	/* Create and show a wait alert */
+	// Create and show a wait alert
 	[self createToastAlertWithMessage:@"Signing in\nPlease Wait..."];
 
 	// send login-event to VidyoClient
@@ -228,19 +229,19 @@
 #pragma mark - Vidyo Initialization
 - (void)clientInit {
 	VidyoBool ret;
-	// check if this method already previously entered
+	// Check if this method already previously entered and return out. Safeguard against multiple instanciation
 	if (self.vidyoClientStarted)
 		return;
 
-	// configure console logging
+	// Configure console logging
 	VidyoClientConsoleLogConfigure(VIDYO_CLIENT_CONSOLE_LOG_CONFIGURATION_ALL);
 
-	// determine video rectangle, from geometry of main window, assuming portrait right-side up orientation
+	// Determine video rectangle, from geometry of main window, assuming portrait right-side up orientation
 	VidyoRect videoRect
 	    = { (VidyoInt)(self.window.frame.origin.x), (VidyoInt)(self.window.frame.origin.y),
 		    (VidyoUint)(self.window.frame.size.width), (VidyoUint)(self.window.frame.size.height) };
 
-	// determine path, default base filename, and levels and categories, used for logging
+	// Determine path, default base filename, and levels and categories, used for logging
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	documentsDirectory = [documentsDirectory stringByAppendingString:@"/"];
@@ -260,7 +261,7 @@
 
 	VidyoClientProfileParams profileParams = { 0 };
 
-	// startup VidyoClient library
+	// Startup VidyoClient library
 	ret = VidyoClientStart(vidyoClientWrapperOnVidyoClientEvent,
 	                       (__bridge VidyoVoidPtr)(self),
 	                       &logParams,
@@ -288,7 +289,7 @@ FAIL:
 	/* [[UIApplication sharedApplication] terminate:self] */;
 }
 
-/* Startup configuration code. */
+// Startup configuration code.
 - (void)bootstrap {
 	VidyoClientRequestConfiguration conf = { 0 };
 	VidyoUint error;
@@ -297,11 +298,11 @@ FAIL:
 	}
 	else {
 		[[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientation)[[UIDevice currentDevice] orientation]];
-		/* Default configuration */
+		// Default configuration
 		conf.enableShowConfParticipantName = VIDYO_TRUE;
 		conf.enableHideCameraOnJoin = VIDYO_FALSE;
 		conf.enableBackgrounding = VIDYO_TRUE;
-		/* Disable autologin */
+		// Disable autologin
 		conf.userID[0] = '\0';
 		conf.portalAddress[0] = '\0';
 		conf.serverAddress[0] = '\0';
@@ -371,9 +372,7 @@ FAIL:
 
 - (void)appDidBecomeActive {
 	if (self.didEverGoToBackground == YES) {
-		/*
-		   Restart any tasks that were paused (or not yet started) while the application was inactive.
-		 */
+		// Restart any tasks that were paused (or not yet started) while the application was inactive.
 		logMsg(@"Going to Foreground");
 
 		VidyoUint error;
@@ -387,9 +386,7 @@ FAIL:
 }
 
 - (void)appWillTerminate {
-	/*
-	   Called when the application is about to terminate.
-	 */
+	// Called when the application is about to terminate.
 	logMsg(@"applicationWillTerminate called");
 
 	// try to shutdown VidyoClient library
@@ -593,7 +590,7 @@ FAIL:
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
 			self.isJoiningConference = FALSE;
 			// Show an alert if user is not online
-			[self createStandardAlertWithTitle:@"User not online. Make sure user is Logged In" andMessage:@""];
+			[self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
 		}
 	}
 	else if (self.guestIDResult) {
