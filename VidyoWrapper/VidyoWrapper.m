@@ -12,7 +12,7 @@
 #import "VidyoEventBridge.h"
 
 #pragma mark - Private Interface
-@interface VidyoWrapper () <NSXMLParserDelegate, UIAlertViewDelegate>
+@interface VidyoWrapper () <NSXMLParserDelegate>
 
 @property (nonatomic) BOOL vidyoClientStarted;
 @property (nonatomic) BOOL didEverGoToBackground;
@@ -315,18 +315,10 @@ FAIL:
 		dispatch_async(dispatch_get_main_queue(), ^{
 		    self.userAlert = [[UIAlertView alloc] initWithTitle:message
 		                                                message:nil
-		                                               delegate:self
+		                                               delegate:nil
 		                                      cancelButtonTitle:nil
 		                                      otherButtonTitles:nil];
-		    // Add an activity indicator view to show progress
-		    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		    // Adjust the indicator so it is up a few pixels from the bottom of the alert
-		    self.activityIndicator.center = CGPointMake(self.userAlert.bounds.size.width / 2,
-		                                                self.userAlert.bounds.size.height / 2);
-		    self.activityIndicator.tintColor = [UIColor redColor];
-		    [self.userAlert addSubview:self.activityIndicator];
-		    [self.activityIndicator startAnimating];
-		    // Show the alert
+            // Show the alert
 		    [self.userAlert show];
 		});
 	}
