@@ -19,8 +19,14 @@
 #pragma mark - Public Method Calls
 // Returns singleton instance of the class
 + (id)sharedInstance;
+
+// ----------------- UI Configuration -----------------
 // Suppress all UI notifications
 - (void)suppressAlerts:(BOOL)suppress;
+// Set the frame for the conference
+- (void)setFrameWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
+
+// ----------------- Conferencing Methods -----------------
 // Logs in a Vidyo member with password
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord;
 // Starts conference for a logged in member

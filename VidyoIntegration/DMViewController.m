@@ -63,6 +63,7 @@
 }
 
 - (IBAction)joinPressed:(id)sender {
+    [self.wrapper setFrameWithXcord:30 yCord:66 width:260 height:200];
 	[self.wrapper initiateConference];
 }
 
@@ -70,6 +71,10 @@
     [self.wrapper joinRoomAsGuestWithURL:@"http://dev20.vidyo.com"
                                  roomKey:@"svXhf7He5RQU"
                                guestName:@"YellowBot"];
+}
+
+- (IBAction)resizePressed:(id)sender {
+    [self.wrapper setFrameWithXcord:60 yCord:100 width:200 height:150];
 }
 
 - (IBAction)clearPressed:(id)sender {

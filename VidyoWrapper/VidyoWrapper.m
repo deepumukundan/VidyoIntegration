@@ -57,7 +57,7 @@
 	if (self = [super init]) {
 		self.didEverGoToBackground = NO;
 		self.window = [[[UIApplication sharedApplication] delegate] window];
-
+        
 		// initialize Vidyo client
 		[self clientInit];
 
@@ -82,63 +82,6 @@
 		                                           object:nil];
 	}
 	return self;
-}
-
-- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName {
-	// Reset for new operation
-	[self resetState];
-	[self resetCredentials];
-
-	// Capture parameters for further operations
-	self.baseURL = url;
-	self.currentUserName = guestName;
-
-	// Activate guest mode
-	self.guestMode = YES;
-
-	// Activate joining status flag
-	self.isJoiningConference = TRUE;
-
-	// Create and show a wait alert
-	[self createToastAlertWithMessage:@"Joining Conference\nPlease Wait..."];
-
-	// Create a web request and start it
-	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
-	                         "<env:Body>"
-	                         "<ns1:LogInAsGuestRequest>"
-	                         "<ns1:roomKey>%@</ns1:roomKey>"
-	                         "<ns1:guestName>%@</ns1:guestName>"
-	                         "</ns1:LogInAsGuestRequest>"
-	                         "</env:Body>"
-	                         "</env:Envelope>", roomKey, guestName];
-	self.webRequest = [self createURLRequestWithURL:url soapMessage:soapMessage soapAction:@"LogInAsGuest"];
-	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-
-	if (!self.webConnection) logMsg(@"The Connection is NULL");
-	logMsg(@"***SENT SOAP Request Guest()***");
-}
-
-- (void)joinRoomAsGuest {
-	// De-Activate joining status flag
-	self.isJoiningConference = FALSE;
-
-	// Dismiss the joining conference toast message
-	[self dismissToastAlert];
-
-	// Create a web request and start it
-	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:gues=\"http://portal.vidyo.com/guest\">"
-	                         "<env:Body>" "<gues:GuestJoinConferenceRequest>"
-	                         "<gues:guestID>%@</gues:guestID>"
-	                         "</gues:GuestJoinConferenceRequest>" "</env:Body>" "</env:Envelope>", self.vidyoGuestID];
-	self.webRequest = [self createURLRequestWithURL:self.baseURL
-	                                    soapMessage:soapMessage
-	                                     soapAction:@"GuestJoinConference"];
-	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-
-	if (!self.webConnection) logMsg(@"The Connection is NULL");
-	logMsg(@"***SENT SOAP Request GuestJoin()***");
 }
 
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord {
@@ -226,6 +169,63 @@
 	logMsg(@"**SENT SOAP Request joinConference()**");
 }
 
+- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName {
+	// Reset for new operation
+	[self resetState];
+	[self resetCredentials];
+    
+	// Capture parameters for further operations
+	self.baseURL = url;
+	self.currentUserName = guestName;
+    
+	// Activate guest mode
+	self.guestMode = YES;
+    
+	// Activate joining status flag
+	self.isJoiningConference = TRUE;
+    
+	// Create and show a wait alert
+	[self createToastAlertWithMessage:@"Joining Conference\nPlease Wait..."];
+    
+	// Create a web request and start it
+	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
+	                         "<env:Body>"
+	                         "<ns1:LogInAsGuestRequest>"
+	                         "<ns1:roomKey>%@</ns1:roomKey>"
+	                         "<ns1:guestName>%@</ns1:guestName>"
+	                         "</ns1:LogInAsGuestRequest>"
+	                         "</env:Body>"
+	                         "</env:Envelope>", roomKey, guestName];
+	self.webRequest = [self createURLRequestWithURL:url soapMessage:soapMessage soapAction:@"LogInAsGuest"];
+	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
+    
+	if (!self.webConnection) logMsg(@"The Connection is NULL");
+	logMsg(@"***SENT SOAP Request Guest()***");
+}
+
+- (void)joinRoomAsGuest {
+	// De-Activate joining status flag
+	self.isJoiningConference = FALSE;
+    
+	// Dismiss the joining conference toast message
+	[self dismissToastAlert];
+    
+	// Create a web request and start it
+	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:gues=\"http://portal.vidyo.com/guest\">"
+	                         "<env:Body>" "<gues:GuestJoinConferenceRequest>"
+	                         "<gues:guestID>%@</gues:guestID>"
+	                         "</gues:GuestJoinConferenceRequest>" "</env:Body>" "</env:Envelope>", self.vidyoGuestID];
+	self.webRequest = [self createURLRequestWithURL:self.baseURL
+	                                    soapMessage:soapMessage
+	                                     soapAction:@"GuestJoinConference"];
+	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
+    
+	if (!self.webConnection) logMsg(@"The Connection is NULL");
+	logMsg(@"***SENT SOAP Request GuestJoin()***");
+}
+
 #pragma mark - Vidyo Initialization
 - (void)clientInit {
 	VidyoBool ret;
@@ -235,11 +235,12 @@
 
 	// Configure console logging
 	VidyoClientConsoleLogConfigure(VIDYO_CLIENT_CONSOLE_LOG_CONFIGURATION_ALL);
+   
 
-	// Determine video rectangle, from geometry of main window, assuming portrait right-side up orientation
-	VidyoRect videoRect
-	    = { (VidyoInt)(self.window.frame.origin.x), (VidyoInt)(self.window.frame.origin.y),
-		    (VidyoUint)(self.window.frame.size.width), (VidyoUint)(self.window.frame.size.height) };
+    // Determine video rectangle, from geometry of main window, assuming portrait right-side up orientation
+   VidyoRect vidyoRect
+    = { (VidyoInt)(self.window.frame.origin.x), (VidyoInt)(self.window.frame.origin.y),
+        (VidyoUint)(self.window.frame.size.width), (VidyoUint)(self.window.frame.size.height) };
 
 	// Determine path, default base filename, and levels and categories, used for logging
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -258,7 +259,7 @@
 		logMsg(@"VidyoClientInit() returned failure!\n");
 		goto FAIL;
 	}
-
+    
 	VidyoClientProfileParams profileParams = { 0 };
 
 	// Startup VidyoClient library
@@ -266,7 +267,7 @@
 	                       (__bridge VidyoVoidPtr)(self),
 	                       &logParams,
 	                       (__bridge VidyoWindowId)self.window,
-	                       &videoRect,
+	                       &vidyoRect,
 	                       NULL,
 	                       &profileParams,
 	                       VIDYO_FALSE);
@@ -659,6 +660,22 @@ FAIL:
 	[urlRequest setHTTPBody:[soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
 
 	return urlRequest;
+}
+
+- (void)setFrameWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height {
+    // Create a resize event and capture the parameters
+    VidyoClientInEventResize event = { 0 };
+    event.x = (VidyoUint)xCord;
+    event.y = (VidyoUint)yCord;
+    event.width = (VidyoUint)width;
+    event.height = (VidyoUint)height;
+    
+    // Send the resize window event
+    (void)VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize));
+//    
+//    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_CLIENT_ERROR_OK) {
+//        logMsg(@"Failed to set window size!");
+//    };
 }
 
 @end
