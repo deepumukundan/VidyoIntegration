@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @interface NSString (Base64)
 
 + (NSString *) base64FromData:(NSData *)data;
