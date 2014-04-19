@@ -74,7 +74,7 @@
 }
 
 - (IBAction)resizePressed:(id)sender {
-    [self.wrapper setFrameWithXcord:60 yCord:100 width:200 height:150];
+    [self.wrapper setFrameWithXcord:30 yCord:66 width:260 height:200];
 }
 
 - (IBAction)clearPressed:(id)sender {

@@ -109,7 +109,7 @@
 	[self createToastAlertWithMessage:@"Signing in\nPlease Wait..."];
 
 	// send login-event to VidyoClient
-	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) == false) {
+	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) == VIDYO_FALSE) {
 		[self dismissToastAlert];
 		[self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
 	}
@@ -122,21 +122,24 @@
 - (void)initiateConference {
 	// Reset for new operation
 	[self resetState];
+    
 	// Signin using credentials so turning off guest mode
 	self.guestMode = NO;
-	// Activate joining status flag
+	
+    // Activate joining status flag
 	self.isJoiningConference = TRUE;
-	// Create and show a wait alert
+	
+    // Create and show a wait alert
 	[self createToastAlertWithMessage:@"Joining Conference\nPlease Wait..."];
-	// Create a web request and start it
+	
+    // Create a web request and start it
 	// Get the EntityId from VidyoPortal using WS User::myAccount
-	NSString *soapMessage = [NSString stringWithFormat:
-	                         @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/user/v1_1\">"
-	                         "<env:Body>"
-	                         "<ns1:MyAccountRequest/>"
-	                         "</env:Body>"
-	                         "</env:Envelope>"];
+	NSString *soapMessage = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/user/v1_1\">"
+    "<env:Body>"
+    "<ns1:MyAccountRequest/>"
+    "</env:Body>"
+    "</env:Envelope>";
 	self.webRequest = [self createURLRequestWithURL:self.baseURL soapMessage:soapMessage soapAction:@"myAccount"];
 	NSString *base64 = [[NSString stringWithFormat:@"%@:%@", self.currentUserName, self.currentUserPassword] base64];
 	NSString *auth = [NSString stringWithFormat:@"Basic %@", base64];
@@ -147,9 +150,6 @@
 }
 
 - (void)joinRoomWithCredentials {
-	// Dismiss the joining conference toast message
-	[self dismissToastAlert];
-
 	// Get the EntityId from VidyoPortal using WS User::myAccount
 	NSString *soapMessage = [NSString stringWithFormat:
 	                         @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -205,18 +205,12 @@
 }
 
 - (void)joinRoomAsGuest {
-	// De-Activate joining status flag
-	self.isJoiningConference = FALSE;
-    
-	// Dismiss the joining conference toast message
-	[self dismissToastAlert];
-    
 	// Create a web request and start it
 	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:gues=\"http://portal.vidyo.com/guest\">"
-	                         "<env:Body>" "<gues:GuestJoinConferenceRequest>"
-	                         "<gues:guestID>%@</gues:guestID>"
-	                         "</gues:GuestJoinConferenceRequest>" "</env:Body>" "</env:Envelope>", self.vidyoGuestID];
+	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
+	                         "<env:Body>" "<ns1:GuestJoinConferenceRequest>"
+	                         "<ns1:guestID>%@</ns1:guestID>"
+	                         "</ns1:GuestJoinConferenceRequest>" "</env:Body>" "</env:Envelope>", self.vidyoGuestID];
 	self.webRequest = [self createURLRequestWithURL:self.baseURL
 	                                    soapMessage:soapMessage
 	                                     soapAction:@"GuestJoinConference"];
@@ -254,9 +248,8 @@
 	logParams.pathToLogDir = pathToLogDir;
 	logParams.logLevelsAndCategories = "warning info@AppGui info@App info@AppEmcpClient info@LmiApp";
 
-
 	if (VidyoClientInitialize(vidyoClientWrapperOnVidyoClientEvent, (__bridge VidyoVoidPtr)(self), &logParams) == VIDYO_FALSE) {
-		logMsg(@"VidyoClientInit() returned failure!\n");
+		logMsg(@"VidyoClientInit() returned failure!");
 		goto FAIL;
 	}
     
@@ -273,12 +266,12 @@
 	                       VIDYO_FALSE);
 
 	if (!ret) {
-		logMsg(@"VidyoClientStart() returned failure!\n");
+		logMsg(@"VidyoClientStart() returned failure!");
 		goto FAIL;
 	}
 	else {
 		self.vidyoClientStarted = YES;
-		logMsg(@"VidyoClientStart() returned success!\n");
+		logMsg(@"VidyoClientStart() returned success!");
 	}
 	[self bootstrap];
 
@@ -303,6 +296,7 @@ FAIL:
 		conf.enableShowConfParticipantName = VIDYO_TRUE;
 		conf.enableHideCameraOnJoin = VIDYO_FALSE;
 		conf.enableBackgrounding = VIDYO_TRUE;
+        conf.enableEntryTone = VIDYO_TRUE;
 		// Disable autologin
 		conf.userID[0] = '\0';
 		conf.portalAddress[0] = '\0';
@@ -364,7 +358,7 @@ FAIL:
 	VidyoClientRequestSetBackground request = { 0 };
 	request.willBackground = VIDYO_TRUE;
 
-	if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_BACKGROUND, &request, sizeof(request))) != VIDYO_CLIENT_ERROR_OK) {
+	if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_BACKGROUND, &request, sizeof(VidyoClientRequestSetBackground))) != VIDYO_CLIENT_ERROR_OK) {
 		logMsg([NSString stringWithFormat:@"Problem going to Background: %d", error]);
 	}
 	sleep(3);
@@ -380,7 +374,7 @@ FAIL:
 		VidyoClientRequestSetBackground request = { 0 };
 		request.willBackground = VIDYO_FALSE;
 
-		if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_BACKGROUND, &request, sizeof(request))) != VIDYO_CLIENT_ERROR_OK) {
+		if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_BACKGROUND, &request, sizeof(VidyoClientRequestSetBackground))) != VIDYO_CLIENT_ERROR_OK) {
 			logMsg([NSString stringWithFormat:@"Problem going to Foreground: %d", error]);
 		}
 	}
@@ -462,7 +456,7 @@ FAIL:
 	// cache orientation if needed
 	if (willSetOrientation) {
 		VidyoClientRequestCallState callState = { 0 };
-		VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_GET_CALL_STATE, &callState, sizeof(callState));
+		VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_GET_CALL_STATE, &callState, sizeof(VidyoClientRequestCallState));
 		// new orientation becomes known, set as last known orientation
 		self.lastKnownOrientation = (unsigned)(event.orientation);
 		if (callState.callState == VIDYO_CLIENT_CALL_STATE_IN_CONFERENCE) {
@@ -671,11 +665,21 @@ FAIL:
     event.height = (VidyoUint)height;
     
     // Send the resize window event
-    (void)VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize));
-//    
-//    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_CLIENT_ERROR_OK) {
+//    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_TRUE) {
 //        logMsg(@"Failed to set window size!");
 //    };
+    
+    // VIDYO_CLIENT_REQUEST_SNAP_RESIZE
+    VidyoUint error;
+    VidyoClientRequestSnapResize resize = { 0 };
+    resize.sizingmethod = VIDYO_CLIENT_RESIZING_METHOD_DIAGONAL;
+    resize.width = 200;
+    resize.height = 200;
+    resize.maxWidth = 200;
+    resize.maxHeight = 200;
+    if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SNAP_RESIZE, &resize, sizeof(VidyoClientRequestSnapResize))) != VIDYO_CLIENT_ERROR_OK) {
+        logMsg([NSString stringWithFormat:@"Problem Resizing: %d", error]);
+    }
 }
 
 @end

@@ -25,6 +25,8 @@
 - (void)suppressAlerts:(BOOL)suppress;
 // Set the frame for the conference
 - (void)setFrameWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
+// Dismiss the alert dialogue box
+- (void)dismissToastAlert;
 
 // ----------------- Conferencing Methods -----------------
 // Logs in a Vidyo member with password

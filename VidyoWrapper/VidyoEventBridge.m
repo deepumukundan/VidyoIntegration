@@ -62,11 +62,9 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 
 			case VIDYO_CLIENT_OUT_EVENT_SIGNED_IN:
 			{
-				/* Dismissing signin alert */
+				/* Dismissing sign in alert */
 				if ([wrapper isSigningIn]) {
-					dispatch_async(dispatch_get_main_queue(), ^{
-					    [wrapper.userAlert dismissWithClickedButtonIndex:0 animated:YES];
-					});
+                    [wrapper dismissToastAlert];
 					[wrapper setIsSigningIn:FALSE];
 				}
 				notificationMsg = @"***** Successfully signed in *****";
@@ -76,11 +74,9 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 
 			case VIDYO_CLIENT_OUT_EVENT_SIGNED_OUT:
 			{
-				/* Dismissing signin alert */
+				/* Dismissing sign in alert */
 				if ([wrapper isSigningIn]) {
-					dispatch_async(dispatch_get_main_queue(), ^{
-					    [wrapper.userAlert dismissWithClickedButtonIndex:0 animated:YES];
-					});
+                    [wrapper dismissToastAlert];
 					[wrapper setIsSigningIn:FALSE];
 				}
 				notificationMsg = @"***** You are signed out *****";
@@ -88,6 +84,13 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 				break;
 			}
 
+			case VIDYO_CLIENT_OUT_EVENT_RESIZE:
+			{
+				notificationMsg = @"***** Vidyo Window Resized *****";
+				logMsg(notificationMsg);
+				break;
+			}
+                
 			case VIDYO_CLIENT_OUT_EVENT_INCOMING_CALL:
 			{
 				/* Auto-accept all incoming calls */
@@ -100,13 +103,17 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 			}
 
 			case VIDYO_CLIENT_OUT_EVENT_CONFERENCE_ACTIVE :
-				{
-					/* TODO - Add logic for joining to a conference logic */
-					[wrapper setIsJoiningConference:FALSE];
-					notificationMsg = @"***** Conference is Active *****";
-					logMsg(notificationMsg);
-					break;
-				}
+            {
+                /* TODO - Add logic for joining to a conference logic */
+                /* Dismissing joining conference alert */
+                if ([wrapper isJoiningConference]) {
+                    [wrapper dismissToastAlert];
+                    [wrapper setIsJoiningConference:FALSE];
+                }
+                notificationMsg = @"***** Conference is Active *****";
+                logMsg(notificationMsg);
+                break;
+            }
 
 			case VIDYO_CLIENT_OUT_EVENT_ADD_SHARE:
 			{
