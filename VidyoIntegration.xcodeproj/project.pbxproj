@@ -56,6 +56,7 @@
 		5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
 		554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
 		5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
+		559DD0BB190551B400BFA556 /* VidyoWrapper.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 55B0D84A18F95AC000B764D4 /* VidyoWrapper.h */; };
 		55B0D84C18F95AC000B764D4 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84518F95AC000B764D4 /* NSString+Base64.m */; };
 		55B0D84D18F95AC000B764D4 /* VidyoEventBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */; };
 		55B0D84E18F95AC000B764D4 /* VidyoWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */; };
@@ -94,6 +95,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				559DD0BB190551B400BFA556 /* VidyoWrapper.h in CopyFiles */,
 				55B0D85518F95DB200B764D4 /* VidyoWrapper.entitlements in CopyFiles */,
 				554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */,
 			);

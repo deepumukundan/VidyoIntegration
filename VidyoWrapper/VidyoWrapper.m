@@ -41,11 +41,14 @@
 @property (nonatomic) NSUInteger windowOriginalyCord;
 @property (nonatomic) NSUInteger windowOriginalWidth;
 @property (nonatomic) NSUInteger windowOriginalHeight;
+@property (nonatomic) BOOL isWindowFrameSet;
 
 @end
 
 #pragma mark - Implementation
 @implementation VidyoWrapper
+
+VidyoRect screenRect;
 
 #pragma mark - Lifecycle
 + (id)sharedInstance {
@@ -93,6 +96,7 @@
     self.windowOriginalyCord = yCord;
     self.windowOriginalWidth = width;
     self.windowOriginalHeight = height;
+    self.isWindowFrameSet = YES;
     
     // initialize Vidyo client library
     [self clientInit];
@@ -107,12 +111,23 @@
 	// Configure console logging
 	VidyoClientConsoleLogConfigure(VIDYO_CLIENT_CONSOLE_LOG_CONFIGURATION_ALL);
     
-    // Determine video rectangle, from passed in configuration, assuming portrait right-side up orientation
-    VidyoRect vidyoRect = {
-        (VidyoInt)(self.windowOriginalxCord),
-        (VidyoInt)(self.windowOriginalyCord),
-        (VidyoUint)(self.windowOriginalWidth),
-        (VidyoUint)(self.windowOriginalHeight) };
+    if (self.isWindowFrameSet) {
+        // Determine video rectangle, from passed in configuration, assuming portrait right-side up orientation
+        VidyoRect vidyoRect = {
+            (VidyoInt)(self.windowOriginalxCord),
+            (VidyoInt)(self.windowOriginalyCord),
+            (VidyoUint)(self.windowOriginalWidth),
+            (VidyoUint)(self.windowOriginalHeight) };
+        screenRect = vidyoRect;
+    } else {
+        // No frame set initially. Assuming full screen layout
+        VidyoRect vidyoRect = {
+            (VidyoInt)(self.window.frame.origin.x),
+            (VidyoInt)(self.window.frame.origin.y),
+            (VidyoUint)(self.window.frame.size.width),
+            (VidyoUint)(self.window.frame.size.height) };
+        screenRect = vidyoRect;
+    }
     
 	// Determine path, default base filename, and levels and categories, used for logging
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -138,7 +153,7 @@
 	                       (__bridge VidyoVoidPtr)(self),
 	                       &logParams,
 	                       (__bridge VidyoWindowId)self.window,
-	                       &vidyoRect,
+	                       &screenRect,
 	                       NULL,
 	                       &profileParams,
 	                       VIDYO_FALSE);
@@ -610,6 +625,25 @@ FAIL:
 }
 
 #pragma mark - Helper Methods
+- (void)suppressAlerts:(BOOL)suppress {
+	self.alertSuppression = suppress;
+}
+
+- (void)resizeWindowWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height {
+    
+    // Create a resize event and capture the parameters
+    VidyoClientInEventResize event = { 0 };
+    event.x = (VidyoUint)xCord;
+    event.y = (VidyoUint)yCord;
+    event.width = (VidyoUint)width;
+    event.height = (VidyoUint)height;
+    
+    // Send the resize window event
+    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_TRUE) {
+        logMsg(@"Failed to resize the Vidyo window!");
+    };
+}
+
 - (void)logMsg:(NSString *)msg {
 	self.dynamicNotification = msg;
 	NSLog(@"%@", msg);
@@ -631,10 +665,6 @@ FAIL:
 	self.baseURL = nil;
 	self.currentUserName = nil;
 	self.currentUserPassword = nil;
-}
-
-- (void)suppressAlerts:(BOOL)suppress {
-	self.alertSuppression = suppress;
 }
 
 - (NSMutableURLRequest *)createURLRequestWithURL:(NSString *)baseURL
@@ -661,21 +691,6 @@ FAIL:
 	[urlRequest setHTTPBody:[soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
 
 	return urlRequest;
-}
-
-- (void)resizeWindowWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height {
-
-    // Create a resize event and capture the parameters
-    VidyoClientInEventResize event = { 0 };
-    event.x = (VidyoUint)xCord;
-    event.y = (VidyoUint)yCord;
-    event.width = (VidyoUint)width;
-    event.height = (VidyoUint)height;
-    
-    // Send the resize window event
-    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_TRUE) {
-        logMsg(@"Failed to set window size!");
-    };
 }
 
 @end
