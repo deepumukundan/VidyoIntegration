@@ -30,9 +30,6 @@
 		553780CA18F7F16F00D6A070 /* VidyoWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 553780C918F7F16F00D6A070 /* VidyoWrapperTests.m */; };
 		553780D918F7F3ED00D6A070 /* VidyoClientLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643D18F075C400BE41F9 /* VidyoClientLib.a */; };
 		553780DA18F7F47F00D6A070 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263F018F0751800BE41F9 /* UIKit.framework */; };
-		554263ED18F0751800BE41F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263EC18F0751800BE41F9 /* Foundation.framework */; };
-		554263EF18F0751800BE41F9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263EE18F0751800BE41F9 /* CoreGraphics.framework */; };
-		554263F118F0751800BE41F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263F018F0751800BE41F9 /* UIKit.framework */; };
 		554263F718F0751800BE41F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 554263F518F0751800BE41F9 /* InfoPlist.strings */; };
 		554263F918F0751800BE41F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 554263F818F0751800BE41F9 /* main.mm */; };
 		554263FD18F0751800BE41F9 /* DMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 554263FC18F0751800BE41F9 /* DMAppDelegate.m */; };
@@ -44,19 +41,14 @@
 		5542640E18F0751800BE41F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263F018F0751800BE41F9 /* UIKit.framework */; };
 		5542641618F0751800BE41F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5542641418F0751800BE41F9 /* InfoPlist.strings */; };
 		5542641818F0751800BE41F9 /* VidyoIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5542641718F0751800BE41F9 /* VidyoIntegrationTests.m */; };
-		5542642218F0753900BE41F9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642118F0753900BE41F9 /* Security.framework */; };
-		5542642418F0754B00BE41F9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642318F0754B00BE41F9 /* OpenGLES.framework */; };
-		5542642618F0755200BE41F9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642518F0755200BE41F9 /* AudioToolbox.framework */; };
-		5542642818F0755A00BE41F9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642718F0755A00BE41F9 /* QuartzCore.framework */; };
-		5542642A18F0756A00BE41F9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642918F0756A00BE41F9 /* CoreVideo.framework */; };
-		5542642C18F0757A00BE41F9 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642B18F0757A00BE41F9 /* CoreMedia.framework */; };
 		5542642E18F0758800BE41F9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642D18F0758800BE41F9 /* AVFoundation.framework */; };
-		5542643018F0759200BE41F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642F18F0759200BE41F9 /* CFNetwork.framework */; };
-		5542643218F0759C00BE41F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643118F0759C00BE41F9 /* SystemConfiguration.framework */; };
 		5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
 		554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
 		5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
 		559DD0BB190551B400BFA556 /* VidyoWrapper.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 55B0D84A18F95AC000B764D4 /* VidyoWrapper.h */; };
+		559DD0BC1905548300BFA556 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642518F0755200BE41F9 /* AudioToolbox.framework */; };
+		559DD0BD1905549A00BFA556 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642B18F0757A00BE41F9 /* CoreMedia.framework */; };
+		559DD0BE190554B700BFA556 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643118F0759C00BE41F9 /* SystemConfiguration.framework */; };
 		55B0D84C18F95AC000B764D4 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84518F95AC000B764D4 /* NSString+Base64.m */; };
 		55B0D84D18F95AC000B764D4 /* VidyoEventBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */; };
 		55B0D84E18F95AC000B764D4 /* VidyoWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */; };
@@ -181,19 +173,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */,
-				5542643218F0759C00BE41F9 /* SystemConfiguration.framework in Frameworks */,
-				5542643018F0759200BE41F9 /* CFNetwork.framework in Frameworks */,
+				559DD0BE190554B700BFA556 /* SystemConfiguration.framework in Frameworks */,
+				559DD0BD1905549A00BFA556 /* CoreMedia.framework in Frameworks */,
+				559DD0BC1905548300BFA556 /* AudioToolbox.framework in Frameworks */,
 				5542642E18F0758800BE41F9 /* AVFoundation.framework in Frameworks */,
-				5542642C18F0757A00BE41F9 /* CoreMedia.framework in Frameworks */,
-				5542642A18F0756A00BE41F9 /* CoreVideo.framework in Frameworks */,
-				5542642818F0755A00BE41F9 /* QuartzCore.framework in Frameworks */,
-				5542642618F0755200BE41F9 /* AudioToolbox.framework in Frameworks */,
-				5542642418F0754B00BE41F9 /* OpenGLES.framework in Frameworks */,
-				5542642218F0753900BE41F9 /* Security.framework in Frameworks */,
-				554263EF18F0751800BE41F9 /* CoreGraphics.framework in Frameworks */,
-				554263F118F0751800BE41F9 /* UIKit.framework in Frameworks */,
-				554263ED18F0751800BE41F9 /* Foundation.framework in Frameworks */,
+				5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

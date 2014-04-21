@@ -13,7 +13,7 @@
 @property (nonatomic) BOOL isJoiningConference;
 
 #pragma mark - Public Properties
-// Watch this property to get continuous logging messages back from the Vidyo subsystem
+// Watch this property to get continuous logging messages back from the Vidyo subsystem. Tip: Use KVO from iOS or a timer based fetch from other systems
 @property (nonatomic, strong) NSString *dynamicNotification;
 
 #pragma mark - Public Method Calls
@@ -21,7 +21,7 @@
 
 // Returns singleton instance of the wrapper class
 + (id)sharedInstance;
-// Sets up the Vidyo Window
+// Sets up the Vidyo Window. Defaults to full screen if this method is not called
 - (void)configureInitialWindowWithXCord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
 
 // ----------------- UI Configuration -----------------
@@ -39,6 +39,7 @@
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord;
 // Starts conference for a logged in member
 - (void)initiateConference;
+
 // Enter a room as guest
 - (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName;
 

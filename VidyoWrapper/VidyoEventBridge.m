@@ -110,7 +110,7 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
                     [wrapper dismissToastAlert];
                     [wrapper setIsJoiningConference:FALSE];
                 }
-                notificationMsg = @"***** Conference is Active *****";
+                notificationMsg = @"*** Vidyo Conference is Active ***";
                 logMsg(notificationMsg);
                 break;
             }
