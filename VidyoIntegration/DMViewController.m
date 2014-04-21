@@ -10,16 +10,17 @@
 #import "VidyoConstants.h"
 #import "VidyoWrapper.h"
 
-@interface DMViewController () <UITextViewDelegate>
+@interface DMViewController ()
 @property (strong, nonatomic) VidyoWrapper *wrapper;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (nonatomic) BOOL windowResized;
 @end
 
 @implementation DMViewController
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	self.textView.delegate = self;
+    self.windowResized = NO;
 	self.textView.scrollEnabled = YES;
 }
 
@@ -38,6 +39,9 @@
 - (IBAction)initPressed:(id)sender {
     // Get an instace of the Vidyo wrapper
     self.wrapper = [VidyoWrapper sharedInstance];
+    // Configure the initial video window size
+    [self.wrapper configureInitialWindowWithXCord:0 yCord:66 width:320 height:330];
+    
     // Observe interested properties
 	[self.wrapper addObserver:self
 	               forKeyPath:kVidyoDynamicNotification
@@ -63,7 +67,6 @@
 }
 
 - (IBAction)joinPressed:(id)sender {
-    [self.wrapper setFrameWithXcord:30 yCord:66 width:260 height:200];
 	[self.wrapper initiateConference];
 }
 
@@ -74,7 +77,13 @@
 }
 
 - (IBAction)resizePressed:(id)sender {
-    [self.wrapper setFrameWithXcord:30 yCord:66 width:260 height:200];
+    if (!self.windowResized) {
+        [self.wrapper resizeWindowWithXcord:60 yCord:66 width:200 height:150];
+        self.windowResized = YES;
+    } else {
+        [self.wrapper resizeWindowWithXcord:0 yCord:66 width:320 height:330];
+        self.windowResized = NO;
+    }
 }
 
 - (IBAction)clearPressed:(id)sender {

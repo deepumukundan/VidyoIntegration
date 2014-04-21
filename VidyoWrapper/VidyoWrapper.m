@@ -37,6 +37,10 @@
 @property (nonatomic, strong) NSString *currentUserPassword;
 @property (nonatomic) BOOL guestMode;
 @property (nonatomic) BOOL alertSuppression;
+@property (nonatomic) NSUInteger windowOriginalxCord;
+@property (nonatomic) NSUInteger windowOriginalyCord;
+@property (nonatomic) NSUInteger windowOriginalWidth;
+@property (nonatomic) NSUInteger windowOriginalHeight;
 
 @end
 
@@ -50,6 +54,7 @@
 	dispatch_once(&onceToken, ^{
 	    sharedInstance = [[self alloc] init];
 	});
+    logMsg(@"Initialized Vidyo Wrapper!");
 	return sharedInstance;
 }
 
@@ -58,9 +63,6 @@
 		self.didEverGoToBackground = NO;
 		self.window = [[[UIApplication sharedApplication] delegate] window];
         
-		// initialize Vidyo client
-		[self clientInit];
-
 		// Add subcription for orientation change notifications
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -84,6 +86,108 @@
 	return self;
 }
 
+- (void)configureInitialWindowWithXCord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height {
+    
+    // Save the dimentions for any reuse and reverting back to original size
+    self.windowOriginalxCord = xCord;
+    self.windowOriginalyCord = yCord;
+    self.windowOriginalWidth = width;
+    self.windowOriginalHeight = height;
+    
+    // initialize Vidyo client library
+    [self clientInit];
+}
+
+- (void)clientInit {
+	VidyoBool ret;
+	// Check if this method already previously entered and return out. Safeguard against multiple instanciation
+	if (self.vidyoClientStarted)
+		return;
+    
+	// Configure console logging
+	VidyoClientConsoleLogConfigure(VIDYO_CLIENT_CONSOLE_LOG_CONFIGURATION_ALL);
+    
+    // Determine video rectangle, from passed in configuration, assuming portrait right-side up orientation
+    VidyoRect vidyoRect = {
+        (VidyoInt)(self.windowOriginalxCord),
+        (VidyoInt)(self.windowOriginalyCord),
+        (VidyoUint)(self.windowOriginalWidth),
+        (VidyoUint)(self.windowOriginalHeight) };
+    
+	// Determine path, default base filename, and levels and categories, used for logging
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	documentsDirectory = [documentsDirectory stringByAppendingString:@"/"];
+	const char *pathToLogDir = [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding];
+    
+	VidyoClientLogParams logParams = { 0 };
+    
+	logParams.logBaseFileName = "VidyoLog_";
+	logParams.pathToLogDir = pathToLogDir;
+	logParams.logLevelsAndCategories = "warning info@AppGui info@App info@AppEmcpClient info@LmiApp";
+    
+	if (VidyoClientInitialize(vidyoClientWrapperOnVidyoClientEvent, (__bridge VidyoVoidPtr)(self), &logParams) == VIDYO_FALSE) {
+		logMsg(@"VidyoClientInit() returned failure!");
+		goto FAIL;
+	}
+    
+	VidyoClientProfileParams profileParams = { 0 };
+    
+	// Startup VidyoClient library
+	ret = VidyoClientStart(vidyoClientWrapperOnVidyoClientEvent,
+	                       (__bridge VidyoVoidPtr)(self),
+	                       &logParams,
+	                       (__bridge VidyoWindowId)self.window,
+	                       &vidyoRect,
+	                       NULL,
+	                       &profileParams,
+	                       VIDYO_FALSE);
+    
+	if (!ret) {
+		logMsg(@"VidyoClientStart() returned failure!");
+		goto FAIL;
+	}
+	else {
+		self.vidyoClientStarted = YES;
+		logMsg(@"VidyoClientStart() returned success!");
+	}
+	[self bootstrap];
+    
+	logMsg(@"Initiliazed Vidyo Libraries!");
+	return;
+    
+	// cleanup on failure, exiting program
+FAIL:
+	/* [[UIApplication sharedApplication] terminate:self] */;
+}
+
+// Startup configuration code.
+- (void)bootstrap {
+	VidyoClientRequestConfiguration conf = { 0 };
+	VidyoUint error;
+	if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_GET_CONFIGURATION, &conf, sizeof(VidyoClientRequestConfiguration))) != VIDYO_CLIENT_ERROR_OK) {
+		logMsg([NSString stringWithFormat:@"Failed to request configuration with error %u", error]);
+	}
+	else {
+		[[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientation)[[UIDevice currentDevice] orientation]];
+		// Default configuration
+		conf.enableShowConfParticipantName = VIDYO_TRUE;
+		conf.enableHideCameraOnJoin = VIDYO_FALSE;
+		conf.enableBackgrounding = VIDYO_TRUE;
+        conf.enableEntryTone = VIDYO_TRUE;
+		// Disable autologin
+		conf.userID[0] = '\0';
+		conf.portalAddress[0] = '\0';
+		conf.serverAddress[0] = '\0';
+		conf.password[0] = '\0';
+		conf.selfViewLoopbackPolicy = 2;
+		if (VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_CONFIGURATION, &conf, sizeof(VidyoClientRequestConfiguration)) != VIDYO_CLIENT_ERROR_OK) {
+			logMsg(@"Failed to set configuration");
+		}
+	}
+}
+
+#pragma mark - Conferencing Methods
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord {
 	// Reset for new operation
 	[self resetState];
@@ -218,95 +322,6 @@
     
 	if (!self.webConnection) logMsg(@"The Connection is NULL");
 	logMsg(@"***SENT SOAP Request GuestJoin()***");
-}
-
-#pragma mark - Vidyo Initialization
-- (void)clientInit {
-	VidyoBool ret;
-	// Check if this method already previously entered and return out. Safeguard against multiple instanciation
-	if (self.vidyoClientStarted)
-		return;
-
-	// Configure console logging
-	VidyoClientConsoleLogConfigure(VIDYO_CLIENT_CONSOLE_LOG_CONFIGURATION_ALL);
-   
-
-    // Determine video rectangle, from geometry of main window, assuming portrait right-side up orientation
-   VidyoRect vidyoRect
-    = { (VidyoInt)(self.window.frame.origin.x), (VidyoInt)(self.window.frame.origin.y),
-        (VidyoUint)(self.window.frame.size.width), (VidyoUint)(self.window.frame.size.height) };
-
-	// Determine path, default base filename, and levels and categories, used for logging
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	documentsDirectory = [documentsDirectory stringByAppendingString:@"/"];
-	const char *pathToLogDir = [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding];
-
-	VidyoClientLogParams logParams = { 0 };
-
-	logParams.logBaseFileName = "VidyoSample_";
-	logParams.pathToLogDir = pathToLogDir;
-	logParams.logLevelsAndCategories = "warning info@AppGui info@App info@AppEmcpClient info@LmiApp";
-
-	if (VidyoClientInitialize(vidyoClientWrapperOnVidyoClientEvent, (__bridge VidyoVoidPtr)(self), &logParams) == VIDYO_FALSE) {
-		logMsg(@"VidyoClientInit() returned failure!");
-		goto FAIL;
-	}
-    
-	VidyoClientProfileParams profileParams = { 0 };
-
-	// Startup VidyoClient library
-	ret = VidyoClientStart(vidyoClientWrapperOnVidyoClientEvent,
-	                       (__bridge VidyoVoidPtr)(self),
-	                       &logParams,
-	                       (__bridge VidyoWindowId)self.window,
-	                       &vidyoRect,
-	                       NULL,
-	                       &profileParams,
-	                       VIDYO_FALSE);
-
-	if (!ret) {
-		logMsg(@"VidyoClientStart() returned failure!");
-		goto FAIL;
-	}
-	else {
-		self.vidyoClientStarted = YES;
-		logMsg(@"VidyoClientStart() returned success!");
-	}
-	[self bootstrap];
-
-	logMsg(@"Initiliazed Vidyo Libraries");
-	return;
-
-	// cleanup on failure, exiting program
-FAIL:
-	/* [[UIApplication sharedApplication] terminate:self] */;
-}
-
-// Startup configuration code.
-- (void)bootstrap {
-	VidyoClientRequestConfiguration conf = { 0 };
-	VidyoUint error;
-	if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_GET_CONFIGURATION, &conf, sizeof(VidyoClientRequestConfiguration))) != VIDYO_CLIENT_ERROR_OK) {
-		logMsg([NSString stringWithFormat:@"Failed to request configuration with error %u", error]);
-	}
-	else {
-		[[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientation)[[UIDevice currentDevice] orientation]];
-		// Default configuration
-		conf.enableShowConfParticipantName = VIDYO_TRUE;
-		conf.enableHideCameraOnJoin = VIDYO_FALSE;
-		conf.enableBackgrounding = VIDYO_TRUE;
-        conf.enableEntryTone = VIDYO_TRUE;
-		// Disable autologin
-		conf.userID[0] = '\0';
-		conf.portalAddress[0] = '\0';
-		conf.serverAddress[0] = '\0';
-		conf.password[0] = '\0';
-		conf.selfViewLoopbackPolicy = 2;
-		if (VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SET_CONFIGURATION, &conf, sizeof(VidyoClientRequestConfiguration)) != VIDYO_CLIENT_ERROR_OK) {
-			logMsg(@"Failed to set configuration");
-		}
-	}
 }
 
 #pragma mark - Alert Display Methods
@@ -648,7 +663,8 @@ FAIL:
 	return urlRequest;
 }
 
-- (void)setFrameWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height {
+- (void)resizeWindowWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height {
+
     // Create a resize event and capture the parameters
     VidyoClientInEventResize event = { 0 };
     event.x = (VidyoUint)xCord;
@@ -657,21 +673,9 @@ FAIL:
     event.height = (VidyoUint)height;
     
     // Send the resize window event
-//    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_TRUE) {
-//        logMsg(@"Failed to set window size!");
-//    };
-    
-    // VIDYO_CLIENT_REQUEST_SNAP_RESIZE
-    VidyoUint error;
-    VidyoClientRequestSnapResize resize = { 0 };
-    resize.sizingmethod = VIDYO_CLIENT_RESIZING_METHOD_DIAGONAL;
-    resize.width = 200;
-    resize.height = 200;
-    resize.maxWidth = 200;
-    resize.maxHeight = 200;
-    if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_SNAP_RESIZE, &resize, sizeof(VidyoClientRequestSnapResize))) != VIDYO_CLIENT_ERROR_OK) {
-        logMsg([NSString stringWithFormat:@"Problem Resizing: %d", error]);
-    }
+    if(VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_RESIZE, &event, sizeof(VidyoClientInEventResize)) != VIDYO_TRUE) {
+        logMsg(@"Failed to set window size!");
+    };
 }
 
 @end

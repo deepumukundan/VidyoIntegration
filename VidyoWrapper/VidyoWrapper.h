@@ -17,18 +17,24 @@
 @property (nonatomic, strong) NSString *dynamicNotification;
 
 #pragma mark - Public Method Calls
-// Returns singleton instance of the class
+// ------------------ Initialization ------------------
+
+// Returns singleton instance of the wrapper class
 + (id)sharedInstance;
+// Sets up the Vidyo Window
+- (void)configureInitialWindowWithXCord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
 
 // ----------------- UI Configuration -----------------
+
 // Suppress all UI notifications
 - (void)suppressAlerts:(BOOL)suppress;
 // Set the frame for the conference
-- (void)setFrameWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
+- (void)resizeWindowWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
 // Dismiss the alert dialogue box
 - (void)dismissToastAlert;
 
 // ----------------- Conferencing Methods -----------------
+
 // Logs in a Vidyo member with password
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord;
 // Starts conference for a logged in member

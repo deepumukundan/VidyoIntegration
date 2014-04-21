@@ -362,18 +362,26 @@
 		5573098318F13A57005FEBB0 /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				55B0D85318F95CDF00B764D4 /* VidyoWrapper.entitlements */,
-				55B0D84418F95AC000B764D4 /* NSString+Base64.h */,
-				55B0D84518F95AC000B764D4 /* NSString+Base64.m */,
+				55BB0F98190527EA001EB207 /* 3rd Party */,
 				55B0D84618F95AC000B764D4 /* VidyoConstants.h */,
 				55B0D84718F95AC000B764D4 /* VidyoEventBridge.h */,
 				55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */,
 				55B0D84F18F95AFB00B764D4 /* VidyoWrapper-Prefix.pch */,
+				55B0D85318F95CDF00B764D4 /* VidyoWrapper.entitlements */,
 				55B0D84A18F95AC000B764D4 /* VidyoWrapper.h */,
 				55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */,
 			);
 			name = Wrapper;
 			path = VidyoIntegration;
+			sourceTree = "<group>";
+		};
+		55BB0F98190527EA001EB207 /* 3rd Party */ = {
+			isa = PBXGroup;
+			children = (
+				55B0D84418F95AC000B764D4 /* NSString+Base64.h */,
+				55B0D84518F95AC000B764D4 /* NSString+Base64.m */,
+			);
+			name = "3rd Party";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
