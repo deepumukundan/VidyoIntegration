@@ -28,7 +28,6 @@
 		553780C218F7F16F00D6A070 /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
 		553780C818F7F16F00D6A070 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 553780C618F7F16F00D6A070 /* InfoPlist.strings */; };
 		553780CA18F7F16F00D6A070 /* VidyoWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 553780C918F7F16F00D6A070 /* VidyoWrapperTests.m */; };
-		553780D918F7F3ED00D6A070 /* VidyoClientLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643D18F075C400BE41F9 /* VidyoClientLib.a */; };
 		553780DA18F7F47F00D6A070 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263F018F0751800BE41F9 /* UIKit.framework */; };
 		554263F718F0751800BE41F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 554263F518F0751800BE41F9 /* InfoPlist.strings */; };
 		554263F918F0751800BE41F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 554263F818F0751800BE41F9 /* main.mm */; };
@@ -42,13 +41,13 @@
 		5542641618F0751800BE41F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5542641418F0751800BE41F9 /* InfoPlist.strings */; };
 		5542641818F0751800BE41F9 /* VidyoIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5542641718F0751800BE41F9 /* VidyoIntegrationTests.m */; };
 		5542642E18F0758800BE41F9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642D18F0758800BE41F9 /* AVFoundation.framework */; };
-		5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
-		554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5542643518F075C400BE41F9 /* ca-certificates-base.crt */; };
 		5572D01218F8357F00E1C4FB /* libVidyoWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553780AF18F7F16E00D6A070 /* libVidyoWrapper.a */; };
 		559DD0BB190551B400BFA556 /* VidyoWrapper.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 55B0D84A18F95AC000B764D4 /* VidyoWrapper.h */; };
 		559DD0BC1905548300BFA556 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642518F0755200BE41F9 /* AudioToolbox.framework */; };
 		559DD0BD1905549A00BFA556 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542642B18F0757A00BE41F9 /* CoreMedia.framework */; };
 		559DD0BE190554B700BFA556 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542643118F0759C00BE41F9 /* SystemConfiguration.framework */; };
+		559DD0CA19055D9900BFA556 /* ca-certificates-base.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 559DD0C119055D8500BFA556 /* ca-certificates-base.crt */; };
+		559DD0CB19055DA900BFA556 /* VidyoClientLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 559DD0C919055D8500BFA556 /* VidyoClientLib.a */; };
 		55B0D84C18F95AC000B764D4 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84518F95AC000B764D4 /* NSString+Base64.m */; };
 		55B0D84D18F95AC000B764D4 /* VidyoEventBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84818F95AC000B764D4 /* VidyoEventBridge.m */; };
 		55B0D84E18F95AC000B764D4 /* VidyoWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B0D84B18F95AC000B764D4 /* VidyoWrapper.m */; };
@@ -87,9 +86,9 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				559DD0CA19055D9900BFA556 /* ca-certificates-base.crt in CopyFiles */,
 				559DD0BB190551B400BFA556 /* VidyoWrapper.h in CopyFiles */,
 				55B0D85518F95DB200B764D4 /* VidyoWrapper.entitlements in CopyFiles */,
-				554534CE18F903B800FFA3F5 /* ca-certificates-base.crt in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,13 +128,13 @@
 		5542642D18F0758800BE41F9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		5542642F18F0759200BE41F9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		5542643118F0759C00BE41F9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		5542643518F075C400BE41F9 /* ca-certificates-base.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ca-certificates-base.crt"; sourceTree = "<group>"; };
-		5542643718F075C400BE41F9 /* VidyoClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoClient.h; sourceTree = "<group>"; };
-		5542643818F075C400BE41F9 /* VidyoClientConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoClientConstants.h; sourceTree = "<group>"; };
-		5542643918F075C400BE41F9 /* VidyoClientMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoClientMessages.h; sourceTree = "<group>"; };
-		5542643A18F075C400BE41F9 /* VidyoClientParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoClientParameters.h; sourceTree = "<group>"; };
-		5542643B18F075C400BE41F9 /* VidyoTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VidyoTypes.h; sourceTree = "<group>"; };
-		5542643D18F075C400BE41F9 /* VidyoClientLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = VidyoClientLib.a; sourceTree = "<group>"; };
+		559DD0C119055D8500BFA556 /* ca-certificates-base.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ca-certificates-base.crt"; sourceTree = "<group>"; };
+		559DD0C319055D8500BFA556 /* VidyoClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidyoClient.h; sourceTree = "<group>"; };
+		559DD0C419055D8500BFA556 /* VidyoClientConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidyoClientConstants.h; sourceTree = "<group>"; };
+		559DD0C519055D8500BFA556 /* VidyoClientMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidyoClientMessages.h; sourceTree = "<group>"; };
+		559DD0C619055D8500BFA556 /* VidyoClientParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidyoClientParameters.h; sourceTree = "<group>"; };
+		559DD0C719055D8500BFA556 /* VidyoTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidyoTypes.h; sourceTree = "<group>"; };
+		559DD0C919055D8500BFA556 /* VidyoClientLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = VidyoClientLib.a; sourceTree = "<group>"; };
 		55B0D84418F95AC000B764D4 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "VidyoWrapper/NSString+Base64.h"; sourceTree = SOURCE_ROOT; };
 		55B0D84518F95AC000B764D4 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "VidyoWrapper/NSString+Base64.m"; sourceTree = SOURCE_ROOT; };
 		55B0D84618F95AC000B764D4 /* VidyoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidyoConstants.h; path = VidyoWrapper/VidyoConstants.h; sourceTree = SOURCE_ROOT; };
@@ -152,8 +151,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				559DD0CB19055DA900BFA556 /* VidyoClientLib.a in Frameworks */,
 				553780DA18F7F47F00D6A070 /* UIKit.framework in Frameworks */,
-				553780D918F7F3ED00D6A070 /* VidyoClientLib.a in Frameworks */,
 				553780B018F7F16F00D6A070 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,7 +214,7 @@
 		554263E018F0751800BE41F9 = {
 			isa = PBXGroup;
 			children = (
-				5542643318F075C400BE41F9 /* VidyoClientLibrary */,
+				559DD0BF19055D8500BFA556 /* VidyoClientLibrary */,
 				5573098318F13A57005FEBB0 /* Wrapper */,
 				554263F218F0751800BE41F9 /* VidyoIntegration */,
 				554263EB18F0751800BE41F9 /* Frameworks */,
@@ -298,44 +297,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		5542643318F075C400BE41F9 /* VidyoClientLibrary */ = {
-			isa = PBXGroup;
-			children = (
-				5542643418F075C400BE41F9 /* certificate */,
-				5542643618F075C400BE41F9 /* include */,
-				5542643C18F075C400BE41F9 /* lib */,
-			);
-			path = VidyoClientLibrary;
-			sourceTree = "<group>";
-		};
-		5542643418F075C400BE41F9 /* certificate */ = {
-			isa = PBXGroup;
-			children = (
-				5542643518F075C400BE41F9 /* ca-certificates-base.crt */,
-			);
-			path = certificate;
-			sourceTree = "<group>";
-		};
-		5542643618F075C400BE41F9 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				5542643718F075C400BE41F9 /* VidyoClient.h */,
-				5542643818F075C400BE41F9 /* VidyoClientConstants.h */,
-				5542643918F075C400BE41F9 /* VidyoClientMessages.h */,
-				5542643A18F075C400BE41F9 /* VidyoClientParameters.h */,
-				5542643B18F075C400BE41F9 /* VidyoTypes.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		5542643C18F075C400BE41F9 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				5542643D18F075C400BE41F9 /* VidyoClientLib.a */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
 		5572D01118F82C5200E1C4FB /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,6 +320,44 @@
 			);
 			name = Wrapper;
 			path = VidyoIntegration;
+			sourceTree = "<group>";
+		};
+		559DD0BF19055D8500BFA556 /* VidyoClientLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				559DD0C019055D8500BFA556 /* certificate */,
+				559DD0C219055D8500BFA556 /* include */,
+				559DD0C819055D8500BFA556 /* lib */,
+			);
+			path = VidyoClientLibrary;
+			sourceTree = "<group>";
+		};
+		559DD0C019055D8500BFA556 /* certificate */ = {
+			isa = PBXGroup;
+			children = (
+				559DD0C119055D8500BFA556 /* ca-certificates-base.crt */,
+			);
+			path = certificate;
+			sourceTree = "<group>";
+		};
+		559DD0C219055D8500BFA556 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				559DD0C319055D8500BFA556 /* VidyoClient.h */,
+				559DD0C419055D8500BFA556 /* VidyoClientConstants.h */,
+				559DD0C519055D8500BFA556 /* VidyoClientMessages.h */,
+				559DD0C619055D8500BFA556 /* VidyoClientParameters.h */,
+				559DD0C719055D8500BFA556 /* VidyoTypes.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		559DD0C819055D8500BFA556 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				559DD0C919055D8500BFA556 /* VidyoClientLib.a */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 		55BB0F98190527EA001EB207 /* 3rd Party */ = {
@@ -511,7 +510,6 @@
 				55B0D85418F95CDF00B764D4 /* VidyoWrapper.entitlements in Resources */,
 				5542640518F0751800BE41F9 /* Images.xcassets in Resources */,
 				554263F718F0751800BE41F9 /* InfoPlist.strings in Resources */,
-				5542643E18F075C400BE41F9 /* ca-certificates-base.crt in Resources */,
 				5542640018F0751800BE41F9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
