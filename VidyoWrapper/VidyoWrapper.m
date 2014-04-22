@@ -202,6 +202,11 @@ FAIL:
 	}
 }
 
+- (void)dealloc {
+    // Call the method to do all cleanup
+    [self appWillTerminate];
+}
+
 #pragma mark - Conferencing Methods
 - (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord {
 	// Reset for new operation
