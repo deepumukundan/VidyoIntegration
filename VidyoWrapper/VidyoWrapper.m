@@ -228,7 +228,7 @@ FAIL:
 	[self createToastAlertWithMessage:@"Signing in\nPlease Wait..."];
 
 	// send login-event to VidyoClient
-	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) == VIDYO_FALSE) {
+	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) != VIDYO_TRUE) {
 		[self dismissToastAlert];
 		[self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
 	}
@@ -598,11 +598,11 @@ FAIL:
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
 	if (self.entityIDResult) {
-		[self.vidyoEntityID appendString:string];
+        self.vidyoEntityID = [string mutableCopy];
 		self.entityIDResult = FALSE;
 	}
 	else if (self.memberStatusResult) {
-		[self.vidyoMemberStatus appendString:string];
+		self.vidyoMemberStatus = [string mutableCopy];
 		self.memberStatusResult = FALSE;
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
 			self.isJoiningConference = FALSE;

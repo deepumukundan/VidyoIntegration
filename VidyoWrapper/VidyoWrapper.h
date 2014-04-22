@@ -7,10 +7,12 @@
 
 @interface VidyoWrapper : NSObject
 
-#pragma mark - Private properties. Do not use unless really needed
+#pragma mark - Private properties & Methods. Do not use unless really needed
 @property (nonatomic, strong) UIAlertView *userAlert;
 @property (nonatomic) BOOL isSigningIn;
 @property (nonatomic) BOOL isJoiningConference;
+// Dismiss the alert dialogue box
+- (void)dismissToastAlert;
 
 #pragma mark - Public Properties
 // Watch this property to get continuous logging messages back from the Vidyo subsystem. Tip: Use KVO from iOS or a timer based fetch from other systems
@@ -30,8 +32,6 @@
 - (void)suppressAlerts:(BOOL)suppress;
 // Set the frame for the conference
 - (void)resizeWindowWithXcord:(NSUInteger)xCord yCord:(NSUInteger)yCord width:(NSUInteger)width height:(NSUInteger)height;
-// Dismiss the alert dialogue box
-- (void)dismissToastAlert;
 
 // ----------------- Conferencing Methods -----------------
 
