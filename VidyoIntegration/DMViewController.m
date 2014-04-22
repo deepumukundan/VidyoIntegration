@@ -22,25 +22,16 @@
 	[super viewDidLoad];
     self.windowResized = NO;
 	self.textView.scrollEnabled = YES;
+    [self configure];
 }
 
-- (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
-	// Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
-	[self.wrapper removeObserver:self forKeyPath:kVidyoDynamicNotification];
-	[self.wrapper removeObserver:self forKeyPath:kVidyoIsSigningIn];
-    [self.wrapper removeObserver:self forKeyPath:kVidyoIsJoiningConference];
-}
-
-#pragma mark - User Actions
-- (IBAction)initPressed:(id)sender {
+- (void)configure {
     // Get an instace of the Vidyo wrapper
     self.wrapper = [VidyoWrapper sharedInstance];
     // Configure the initial video window size
     [self.wrapper configureInitialWindowWithXCord:0 yCord:66 width:320 height:330];
+    // Show progress dialogs
+    [self.wrapper suppressAlerts:NO];
     
     // Observe interested properties
 	[self.wrapper addObserver:self
@@ -56,10 +47,21 @@
 	                  options:NSKeyValueObservingOptionNew
 	                  context:NULL];
     
-    [self.wrapper suppressAlerts:NO];
 	self.textView.text = @"Initialized Vidyo Library";
 }
 
+- (void)didReceiveMemoryWarning {
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+	[self.wrapper removeObserver:self forKeyPath:kVidyoDynamicNotification];
+	[self.wrapper removeObserver:self forKeyPath:kVidyoIsSigningIn];
+    [self.wrapper removeObserver:self forKeyPath:kVidyoIsJoiningConference];
+}
+
+#pragma mark - User Actions
 - (IBAction)loginPressed:(id)sender {
     [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
                       userName:@"marina"
