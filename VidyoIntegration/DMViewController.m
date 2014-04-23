@@ -18,6 +18,15 @@
 
 @implementation DMViewController
 
+
+- (IBAction)loginJoinPressed:(id)sender {
+    [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
+                      userName:@"marina"
+                      passWord:@"marina"];
+    [self.wrapper initiateConference];
+}
+
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
     self.windowResized = NO;
