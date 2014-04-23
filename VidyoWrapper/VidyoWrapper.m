@@ -235,7 +235,7 @@ FAIL:
 	// send login-event to VidyoClient
 	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) != VIDYO_TRUE) {
 		[self dismissToastAlert];
-		[self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
+		// [self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
 	}
 	else {
 		// Sign in in progress
@@ -244,9 +244,6 @@ FAIL:
 }
 
 - (void)initiateConference {
-	// Reset for new operation
-	[self resetState];
-    
 	// Signin using credentials so turning off guest mode
 	self.guestMode = NO;
 	
@@ -612,7 +609,7 @@ FAIL:
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
 			self.isJoiningConference = FALSE;
 			// Show an alert if user is not online
-			[self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
+			// [self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
 		}
 	}
 	else if (self.guestIDResult) {
