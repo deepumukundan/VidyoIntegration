@@ -62,19 +62,23 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 
 			case VIDYO_CLIENT_OUT_EVENT_SIGNED_IN:
 			{
-				/* Dismissing sign in alert */
+				// Dismissing sign in alert
 				if ([wrapper isSigningIn]) {
                     [wrapper dismissToastAlert];
 					[wrapper setIsSigningIn:FALSE];
 				}
 				notificationMsg = @"***** Successfully signed in *****";
 				logMsg(notificationMsg);
+                
+                // Auto Join conference
+                [wrapper executeMethodInMainThread:@"initiateConference"];
+                
 				break;
 			}
 
 			case VIDYO_CLIENT_OUT_EVENT_SIGNED_OUT:
 			{
-				/* Dismissing sign in alert */
+				// Dismissing sign in alert
 				if ([wrapper isSigningIn]) {
                     [wrapper dismissToastAlert];
 					[wrapper setIsSigningIn:FALSE];

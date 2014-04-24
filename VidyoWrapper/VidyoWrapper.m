@@ -42,6 +42,7 @@
 @property (nonatomic) NSUInteger windowOriginalWidth;
 @property (nonatomic) NSUInteger windowOriginalHeight;
 @property (nonatomic) BOOL isWindowFrameSet;
+@property (nonatomic) BOOL isAutoJoinConferenceEnabled;
 
 @end
 
@@ -208,7 +209,7 @@ FAIL:
 }
 
 #pragma mark - Conferencing Methods
-- (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord {
+- (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord autoJoinConference:(BOOL)autoJoinFlag {
 	// Reset for new operation
 	[self resetState];
 	[self resetCredentials];
@@ -217,6 +218,7 @@ FAIL:
 	self.baseURL = url;
 	self.currentUserName = userName;
 	self.currentUserPassword = passWord;
+    self.isAutoJoinConferenceEnabled = autoJoinFlag;
 
 	// If portal URL does not start with schema than put it there explicetly
 	if (!([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"])) {
@@ -608,20 +610,20 @@ FAIL:
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
 	if (self.entityIDResult) {
         self.vidyoEntityID = [string mutableCopy];
-		self.entityIDResult = FALSE;
+		self.entityIDResult = NO;
 	}
 	else if (self.memberStatusResult) {
 		self.vidyoMemberStatus = [string mutableCopy];
-		self.memberStatusResult = FALSE;
+		self.memberStatusResult = NO;
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
-			self.isJoiningConference = FALSE;
+			self.isJoiningConference = NO;
 			// Show an alert if user is not online
 			// [self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
 		}
 	}
 	else if (self.guestIDResult) {
 		self.vidyoGuestID = [string mutableCopy];
-		self.guestIDResult = FALSE;
+		self.guestIDResult = NO;
 	}
 }
 
@@ -629,7 +631,7 @@ FAIL:
 	NSString *element = [self getElementFromElementName:elementName];
 	if (!element) return;
 	if ([element isEqualToString:@"MyAccountResponse"]) {
-		self.entityIDResult = FALSE;
+		self.entityIDResult = NO;
 	}
 }
 
@@ -667,11 +669,12 @@ FAIL:
 }
 
 - (void)resetState {
-	self.isSigningIn = FALSE;
-	self.isJoiningConference = FALSE;
-	self.entityIDResult = FALSE;
-	self.memberStatusResult = FALSE;
-	self.guestIDResult = FALSE;
+	self.isSigningIn = NO;
+	self.isJoiningConference = NO;
+    self.isAutoJoinConferenceEnabled = NO;
+	self.entityIDResult = NO;
+	self.memberStatusResult = NO;
+	self.guestIDResult = NO;
 	self.vidyoEntityID = nil;
 	self.vidyoMemberStatus = nil;
 	self.vidyoGuestID = nil;
@@ -712,6 +715,12 @@ FAIL:
 
 
 - (void)executeMethodInMainThread:(NSString *)methodName {
+    // If Autojoin is not enabled and initiateConference is called, don't do anything
+    if (!self.isAutoJoinConferenceEnabled &&
+        [methodName isEqualToString:NSStringFromSelector(@selector(initiateConference))]){
+        return;
+    }
+    // Execute the passed in method in the main thread
     [self performSelectorOnMainThread:NSSelectorFromString(methodName)
                            withObject:self
                         waitUntilDone:NO];

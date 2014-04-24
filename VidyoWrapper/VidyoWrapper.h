@@ -38,7 +38,7 @@
 // ----------------- Conferencing Methods -----------------
 
 // Logs in a Vidyo member with password
-- (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord;
+- (void)loginWithURL:(NSString *)url userName:(NSString *)userName passWord:(NSString *)passWord autoJoinConference:(BOOL)autoJoinFlag;
 // Starts conference for a logged in member
 - (void)initiateConference;
 

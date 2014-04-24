@@ -65,7 +65,8 @@
 - (IBAction)loginPressed:(id)sender {
     [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
                       userName:@"marina"
-                      passWord:@"marina"];
+                      passWord:@"marina"
+            autoJoinConference:NO];
 }
 
 - (IBAction)joinPressed:(id)sender {
