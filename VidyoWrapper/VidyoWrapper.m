@@ -237,7 +237,7 @@ FAIL:
 	// send login-event to VidyoClient
 	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) != VIDYO_TRUE) {
 		[self dismissToastAlert];
-		// [self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
+		[self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
 	}
 	else {
 		// Sign in in progress
@@ -618,7 +618,7 @@ FAIL:
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
 			self.isJoiningConference = NO;
 			// Show an alert if user is not online
-			// [self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
+			[self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
 		}
 	}
 	else if (self.guestIDResult) {
