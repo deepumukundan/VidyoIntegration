@@ -695,4 +695,11 @@ FAIL:
 	return urlRequest;
 }
 
+
+- (void)executeMethodInMainThread:(NSString *)methodName {
+    [self performSelectorOnMainThread:NSSelectorFromString(methodName)
+                           withObject:self
+                        waitUntilDone:NO];
+}
+
 @end

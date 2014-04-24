@@ -13,6 +13,8 @@
 @property (nonatomic) BOOL isJoiningConference;
 // Dismiss the alert dialogue box
 - (void)dismissToastAlert;
+// Execute a method in the main thread
+- (void)executeMethodInMainThread:(NSString *)methodName;
 
 #pragma mark - Public Properties
 // Watch this property to get continuous logging messages back from the Vidyo subsystem. Tip: Use KVO from iOS or a timer based fetch from other systems
