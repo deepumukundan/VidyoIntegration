@@ -235,7 +235,7 @@ FAIL:
 	// send login-event to VidyoClient
 	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) != VIDYO_TRUE) {
 		[self dismissToastAlert];
-		// [self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
+		[self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
 	}
 	else {
 		// Sign in in progress
@@ -408,6 +408,9 @@ FAIL:
 	// Called when the application is about to terminate.
 	logMsg(@"applicationWillTerminate called");
 
+    // Dismiss any popups being displayed
+    [self dismissToastAlert];
+    
 	// try to shutdown VidyoClient library
 	if (!self.vidyoClientStarted) {
 		return;
@@ -514,6 +517,10 @@ FAIL:
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	logMsg([NSString stringWithFormat:@"Error with Connection: %@", error.description]);
+    // Do some cleanup
+    [self resetState];
+    [self resetCredentials];
+    [self dismissToastAlert];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
@@ -609,11 +616,11 @@ FAIL:
 		if (![self.vidyoMemberStatus isEqualToString:@"Online"]) {
 			self.isJoiningConference = FALSE;
 			// Show an alert if user is not online
-			// [self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
+			[self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
 		}
 	}
 	else if (self.guestIDResult) {
-		[self.vidyoGuestID appendString:string];
+		self.vidyoGuestID = [string mutableCopy];
 		self.guestIDResult = FALSE;
 	}
 }
@@ -624,6 +631,14 @@ FAIL:
 	if ([element isEqualToString:@"MyAccountResponse"]) {
 		self.entityIDResult = FALSE;
 	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
+    logMsg(parseError.description);
+    // Do some cleanup
+    [self resetState];
+    [self resetCredentials];
+    [self dismissToastAlert];
 }
 
 #pragma mark - Helper Methods

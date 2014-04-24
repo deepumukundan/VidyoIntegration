@@ -69,10 +69,6 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 				}
 				notificationMsg = @"***** Successfully signed in *****";
 				logMsg(notificationMsg);
-                
-                // TODO - REMOVE
-                [wrapper executeMethodInMainThread:@"initiateConference"];
-                
 				break;
 			}
 
