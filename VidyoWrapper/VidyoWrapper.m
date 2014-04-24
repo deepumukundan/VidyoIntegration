@@ -519,10 +519,10 @@ FAIL:
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	logMsg([NSString stringWithFormat:@"Done. Received Bytes: %lu", (unsigned long)[self.webData length]]);
 
-	/* NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
+	NSString *theXML = [[NSString alloc] initWithBytes:[self.webData mutableBytes]
 	                                            length:[self.webData length]
 	                                          encoding:NSUTF8StringEncoding];
-	   logMsg(theXML); */
+    logMsg(theXML);
 
 	self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
 	self.webData = nil;
@@ -678,7 +678,7 @@ FAIL:
 		urlString = [NSString stringWithFormat:@"%@/services/VidyoPortalGuestService?wsdl", baseURL];
 	}
 	else {
-		urlString = [NSString stringWithFormat:@"%@/services/v1_1/VidyoPortalUserService?wsdl", baseURL];
+        urlString = [NSString stringWithFormat:@"%@/services/v1_1/VidyoPortalUserService?wsdl", baseURL];
 	}
 
 	NSURL *url = [NSURL URLWithString:urlString];
