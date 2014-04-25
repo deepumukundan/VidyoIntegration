@@ -191,6 +191,8 @@ FAIL:
 		conf.enableHideCameraOnJoin = VIDYO_FALSE;
 		conf.enableBackgrounding = VIDYO_TRUE;
         conf.enableEntryTone = VIDYO_TRUE;
+        conf.enableLogWindow = VIDYO_FALSE;
+        conf.enableEchoCancellation = VIDYO_TRUE;
 		// Disable autologin
 		conf.userID[0] = '\0';
 		conf.portalAddress[0] = '\0';
@@ -712,7 +714,6 @@ FAIL:
 
 	return urlRequest;
 }
-
 
 - (void)executeMethodInMainThread:(NSString *)methodName {
     // If Autojoin is not enabled and initiateConference is called, don't do anything
