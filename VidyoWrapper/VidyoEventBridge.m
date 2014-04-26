@@ -32,6 +32,7 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
 
 	if (event >= VIDYO_CLIENT_OUT_EVENT_MIN
 	    && event <= VIDYO_CLIENT_OUT_EVENT_MAX) {
+        
 		switch (event) {
 			case VIDYO_CLIENT_OUT_EVENT_LICENSE:
 			{

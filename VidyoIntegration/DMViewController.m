@@ -46,8 +46,6 @@
 	               forKeyPath:kVidyoIsJoiningConference
 	                  options:NSKeyValueObservingOptionNew
 	                  context:NULL];
-    
-	self.textView.text = @"Initialized Vidyo Library";
 }
 
 - (void)didReceiveMemoryWarning {

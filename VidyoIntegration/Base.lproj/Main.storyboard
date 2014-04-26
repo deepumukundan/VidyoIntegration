@@ -17,14 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ksc-Iz-ntb">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" alwaysBounceVertical="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ksc-Iz-ntb">
                                 <rect key="frame" x="0.0" y="400" width="320" height="168"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="L0a-ll-QH4"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="168" id="RIV-bp-CZ3"/>
-                                    <constraint firstAttribute="height" constant="168" id="eZd-cp-Q2T"/>
+                                    <constraint firstAttribute="width" constant="320" id="7B0-cV-ggf"/>
+                                    <constraint firstAttribute="height" constant="168" id="l2x-bY-lQT"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -89,16 +88,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerY" secondItem="Ksc-Iz-ntb" secondAttribute="centerY" constant="-200" id="NV1-Ao-aJ9"/>
                             <constraint firstItem="6YS-eA-xQc" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="PJV-Az-mHn"/>
                             <constraint firstItem="eOo-Mt-uud" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="QXN-Ru-dwT"/>
+                            <constraint firstItem="Ksc-Iz-ntb" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Qqc-V7-9MY"/>
                             <constraint firstItem="TNp-IN-Va1" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="Vy0-T8-aaD"/>
                             <constraint firstItem="Nc5-2h-Et8" firstAttribute="leading" secondItem="6YS-eA-xQc" secondAttribute="trailing" constant="23" id="YII-YU-Lmm"/>
                             <constraint firstItem="eOo-Mt-uud" firstAttribute="leading" secondItem="Nc5-2h-Et8" secondAttribute="trailing" constant="26" id="YvD-WZ-CLj"/>
                             <constraint firstItem="IFz-Xt-Ncj" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="cb0-cp-jur"/>
+                            <constraint firstAttribute="bottom" secondItem="Ksc-Iz-ntb" secondAttribute="bottom" id="cmk-ZI-bZS"/>
                             <constraint firstItem="6YS-eA-xQc" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="m7e-jw-68I"/>
                             <constraint firstItem="TNp-IN-Va1" firstAttribute="leading" secondItem="IFz-Xt-Ncj" secondAttribute="trailing" constant="19" id="nr0-vW-yj4"/>
-                            <constraint firstItem="Ksc-Iz-ntb" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="yOq-wE-EJj"/>
                             <constraint firstItem="IFz-Xt-Ncj" firstAttribute="leading" secondItem="eOo-Mt-uud" secondAttribute="trailing" constant="20" id="zPq-Je-EKY"/>
                             <constraint firstItem="Nc5-2h-Et8" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="zTe-D4-vFP"/>
                         </constraints>
@@ -109,7 +108,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1329" y="-228"/>
+            <point key="canvasLocation" x="-1633" y="-320"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
