@@ -637,7 +637,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = VidyoWrapper/VidyoWrapper.entitlements;
+				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/VidyoWrapper.dst;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VidyoWrapper/VidyoWrapper-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -649,6 +651,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/VidyoClientLibrary/lib",
 				);
+				LINK_WITH_STANDARD_LIBRARIES = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -661,7 +664,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = VidyoWrapper/VidyoWrapper.entitlements;
+				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/VidyoWrapper.dst;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VidyoWrapper/VidyoWrapper-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
@@ -669,6 +674,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/VidyoClientLibrary/lib",
 				);
+				LINK_WITH_STANDARD_LIBRARIES = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
