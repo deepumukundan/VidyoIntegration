@@ -271,7 +271,7 @@ FAIL:
 	NSString *auth = [NSString stringWithFormat:@"Basic %@", base64];
 	[self.webRequest addValue:auth forHTTPHeaderField:@"Authorization"];
 	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-	if (!self.webConnection) logMsg(@"The Connection is NULL");
+	if (!self.webConnection) logMsg(@"The connection is null!");
 	logMsg(@"***Sent SOAP Request myAccount()***");
 }
 
@@ -291,7 +291,7 @@ FAIL:
 	NSString *auth = [NSString stringWithFormat:@"Basic %@", base64];
 	[self.webRequest addValue:auth forHTTPHeaderField:@"Authorization"];
 	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-	if (!self.webConnection) logMsg(@"The Connection is NULL");
+	if (!self.webConnection) logMsg(@"The connection is null!");
 	logMsg(@"**Sent SOAP Request joinConference()**");
 }
 
@@ -327,7 +327,7 @@ FAIL:
 	self.webRequest = [self createURLRequestWithURL:url soapMessage:soapMessage soapAction:@"LogInAsGuest"];
 	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
     
-	if (!self.webConnection) logMsg(@"The Connection is NULL");
+	if (!self.webConnection) logMsg(@"The connection is null!");
 	logMsg(@"***Sent SOAP Request LogInAsGuestRequest()***");
 }
 
@@ -358,7 +358,7 @@ FAIL:
     self.webRequest = [self createURLRequestWithURL:self.baseURL soapMessage:soapMessage soapAction:@"LinkEndpointToGuest"];
 	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
     
-	if (!self.webConnection) logMsg(@"The Connection is NULL");
+	if (!self.webConnection) logMsg(@"The connection is null!");
 	logMsg(@"***Sent SOAP Request LinkEndpointToGuestRequest()***");
 }
 
@@ -368,7 +368,6 @@ FAIL:
 
     VidyoClientInEventSignIn event = {0};
     
-    NSString *guestID = [self.soapResponseDict valueForKey:kResponseElementGuestID];
     NSString *vmAddress = [self.soapResponseDict valueForKey:kResponseElementvmaddress];
     NSArray *serverAddressComponents = [vmAddress componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@:;"]];
     NSString *serverIdentity = serverAddressComponents[0];
@@ -410,20 +409,27 @@ FAIL:
 		// Sign in in progress
 		self.isSigningIn = TRUE;
 	}
+}
+
+- (void)joinRoomAsGuestStep3 {
+    //Increment the step
+    self.guestLoginStep = 3;
+    
+    NSString *guestID = [self.soapResponseDict valueForKey:kResponseElementGuestID];
     
     // Create a web request and start it
     NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-    	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
-    	                         "<env:Body>" "<ns1:GuestJoinConferenceRequest>"
-    	                         "<ns1:guestID>%@</ns1:guestID>"
-    	                         "</ns1:GuestJoinConferenceRequest>"
-                                 "</env:Body>"
-                                 "</env:Envelope>", guestID];
+                             "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
+                             "<env:Body>" "<ns1:GuestJoinConferenceRequest>"
+                             "<ns1:guestID>%@</ns1:guestID>"
+                             "</ns1:GuestJoinConferenceRequest>"
+                             "</env:Body>"
+                             "</env:Envelope>", guestID];
     self.webRequest = [self createURLRequestWithURL:self.baseURL
                                         soapMessage:soapMessage
-                                        soapAction:@"GuestJoinConference"];
+                                         soapAction:@"GuestJoinConference"];
     self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-    if (!self.webConnection) logMsg(@"The Connection is NULL");
+	if (!self.webConnection) logMsg(@"The connection is null!");
     logMsg(@"***Sent SOAP Request GuestJoinConference()***");
 }
 
@@ -633,7 +639,7 @@ FAIL:
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	logMsg([NSString stringWithFormat:@"Error with connection: %@", error.localizedDescription]);
-    // Do some cleanup
+    // Cleanup state
     [self resetState];
     [self resetCredentials];
     [self dismissToastAlert];
@@ -682,13 +688,13 @@ FAIL:
 - (NSString *)getElementFromElementName:(NSString *)elementName {
 	NSArray *split = [elementName componentsSeparatedByString:@":"];
 	if (!split || ([split count] != 2)) {
-		logMsg([NSString stringWithFormat:@"Not a valid elementName : '%@'", elementName]);
-		return NULL;
+		NSLog(@"Not a valid elementName : '%@'", elementName);
+		return nil;
 	}
 	NSString *element = [split objectAtIndex:1];
 	if (!element) {
-		logMsg(@"Element is null");
-		return NULL;
+		NSLog(@"Element is null");
+		return nil;
 	}
 	return [NSString stringWithString:element];
 }
@@ -715,7 +721,8 @@ FAIL:
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
     NSLog(@"%@",self.soapResponseDict);
-    if (![[self.soapResponseDict valueForKey:kResponseElementMemberStatus] isEqualToString:@"Online"]) {
+    NSString *memberStatus = [self.soapResponseDict valueForKey:kResponseElementMemberStatus];
+    if (memberStatus && ![memberStatus isEqualToString:@"Online"]) {
         self.isJoiningConference = NO;
         // Show an alert if user is not online
         [self createStandardAlertWithTitle:@"User not Online. Make sure user is Logged In" andMessage:@""];
@@ -724,7 +731,7 @@ FAIL:
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
     logMsg(parseError.description);
-    // Do some cleanup
+    // Cleanup state
     [self resetState];
     [self resetCredentials];
     [self dismissToastAlert];
@@ -799,6 +806,11 @@ FAIL:
     // If Autojoin is not enabled and initiateConference is called, don't do anything
     if (!self.isAutoJoinConferenceEnabled &&
         [methodName isEqualToString:NSStringFromSelector(@selector(initiateConference))]){
+        return;
+    }
+    // If not guest mode and joinRoomAsGuestStep3 is called, don't do anything
+    if (!self.guestMode &&
+        [methodName isEqualToString:NSStringFromSelector(@selector(joinRoomAsGuestStep3))]){
         return;
     }
     // Execute the passed in method in the main thread
