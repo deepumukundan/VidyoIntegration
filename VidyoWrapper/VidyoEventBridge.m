@@ -73,7 +73,6 @@ void vidyoClientWrapperOnVidyoClientEvent(VidyoClientOutEvent event,
                 
                 // Auto Join conference. The logic to execute which method is handled by wrapper based on state.
                 [wrapper executeMethodInMainThread:@"initiateConference"];
-                [wrapper executeMethodInMainThread:@"joinRoomAsGuestStep3"];
                 
 				break;
 			}

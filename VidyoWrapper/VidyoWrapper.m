@@ -40,7 +40,6 @@
 @property (nonatomic, strong) NSString *currentXMLElement;
 @property (nonatomic, strong) NSMutableString *currentXMLElementContent;
 @property (nonatomic, strong) NSMutableDictionary *soapResponseDict;
-@property (nonatomic) NSUInteger guestLoginStep;
 @property (nonatomic, strong) NSMutableString *errorMessage;
 @property (nonatomic) BOOL errorMessageResult;
 
@@ -98,7 +97,9 @@ VidyoRect screenRect;
     self.windowOriginalyCord = yCord;
     self.windowOriginalWidth = width;
     self.windowOriginalHeight = height;
-    self.isWindowFrameSet = YES;
+    if (width > 0 && height > 0) {
+        self.isWindowFrameSet = YES;
+    }
     
     // initialize Vidyo client library
     [self clientInit];
@@ -223,12 +224,12 @@ FAIL:
 	self.currentUserPassword = passWord;
     self.isAutoJoinConferenceEnabled = autoJoinFlag;
 
-	// If portal URL does not start with schema than put it there explicetly
+	// If portal URL does not start with schema than put it there explicitly
 	if (!([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"])) {
 		url = [NSString stringWithFormat:@"http://%@", url];
 	}
 
-	// Initaite the local sign in process
+	// Initiate the local sign in process
 	VidyoClientInEventLogIn event = { 0 };
 	strlcpy(event.portalUri, [self.baseURL UTF8String], sizeof(event.portalUri));
 	strlcpy(event.userName, [self.currentUserName UTF8String], sizeof(event.userName));
@@ -237,13 +238,13 @@ FAIL:
 	// Create and show a wait alert
 	[self createToastAlertWithMessage:@"Signing in\nPlease wait..."];
 
-	// send login-event to VidyoClient
+	// Send login-event to VidyoClient
 	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_LOGIN, &event, sizeof(VidyoClientInEventLogIn)) != VIDYO_TRUE) {
 		[self dismissToastAlert];
 		[self createStandardAlertWithTitle:@"Failed to Sign in" andMessage:@""];
 	}
 	else {
-		// Sign in in progress
+		// Activating the signing in flag
 		self.isSigningIn = TRUE;
 	}
 }
@@ -256,7 +257,7 @@ FAIL:
 	self.isJoiningConference = TRUE;
 	
     // Create and show a wait alert
-	[self createToastAlertWithMessage:@"Joining conference\nPlease wait..."];
+	[self createToastAlertWithMessage:@"Joining Conference\nPlease wait..."];
 	
     // Create a web request and start it
 	// Get the EntityId from VidyoPortal using WS User::myAccount
@@ -295,7 +296,7 @@ FAIL:
 	logMsg(@"**Sent SOAP Request joinConference()**");
 }
 
-- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName {
+- (void)joinRoomAsGuestWithURL:(NSString *)url roomKey:(NSString *)roomKey guestName:(NSString *)guestName pin:(NSString *)pin{
 	// Reset for new operation
 	[self resetState];
 	[self resetCredentials];
@@ -304,133 +305,34 @@ FAIL:
 	self.baseURL = url;
 	self.currentUserName = guestName;
     
+    // If portal URL does not start with schema than put it there explicitly
+	if (!([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"])) {
+		url = [NSString stringWithFormat:@"http://%@", url];
+	}
+    
 	// Activate guest mode and set the step
 	self.guestMode = YES;
-    self.guestLoginStep = 0;
-    
-	// Activate joining status flag
-	self.isJoiningConference = TRUE;
     
 	// Create and show a wait alert
-	[self createToastAlertWithMessage:@"Signing in as guest\nPlease wait..."];
+	[self createToastAlertWithMessage:@"Joining Conference as Guest\nPlease wait..."];
     
-	// Create a web request and start it
-	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	                         "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
-	                         "<env:Body>"
-	                         "<ns1:LogInAsGuestRequest>"
-	                         "<ns1:roomKey>%@</ns1:roomKey>"
-	                         "<ns1:guestName>%@</ns1:guestName>"
-	                         "</ns1:LogInAsGuestRequest>"
-	                         "</env:Body>"
-	                         "</env:Envelope>", roomKey, guestName];
-	self.webRequest = [self createURLRequestWithURL:url soapMessage:soapMessage soapAction:@"LogInAsGuest"];
-	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-    
-	if (!self.webConnection) logMsg(@"The connection is null!");
-	logMsg(@"***Sent SOAP Request LogInAsGuestRequest()***");
-}
-
-- (void)joinRoomAsGuestStep1 {
-    
-    // Increment the step
-    self.guestLoginStep = 1;
-    
-    // Get the EID from the Vidyo subsystem
-    VidyoClientRequestGetEid eidRequest =  { 0 };
-    VidyoUint error;
-    if ((error = VidyoClientSendRequest(VIDYO_CLIENT_REQUEST_GET_EID, &eidRequest, sizeof(VidyoClientRequestGetEid))) != VIDYO_CLIENT_ERROR_OK) {
-        logMsg([NSString stringWithFormat:@"*** Request for EID Failed *** - %d",error]);
-    };
-    
-    NSString *guestID = [self.soapResponseDict valueForKey:kResponseElementGuestID];
-    
-    // Create a web request and start it
-	NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                 "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
-                                 "<env:Body>"
-                                 "<ns1:LinkEndpointToGuestRequest>"
-                                 "<ns1:guestID>%@</ns1:guestID>"
-                                 "<ns1:EID>%s</ns1:EID>"
-                                 "</ns1:LinkEndpointToGuestRequest>"
-                                 "</env:Body>"
-                                 "</env:Envelope>",guestID,eidRequest.EID];
-    self.webRequest = [self createURLRequestWithURL:self.baseURL soapMessage:soapMessage soapAction:@"LinkEndpointToGuest"];
-	self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-    
-	if (!self.webConnection) logMsg(@"The connection is null!");
-	logMsg(@"***Sent SOAP Request LinkEndpointToGuestRequest()***");
-}
-
-- (void)joinRoomAsGuestStep2 {
-    // Increment the step
-    self.guestLoginStep = 2;
-
-    VidyoClientInEventSignIn event = {0};
-    
-    NSString *vmAddress = [self.soapResponseDict valueForKey:kResponseElementvmaddress];
-    NSArray *serverAddressComponents = [vmAddress componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@:;"]];
-    NSString *serverIdentity = serverAddressComponents[0];
-    NSString *serverAddress = serverAddressComponents[1];
-    NSString *serverPort = serverAddressComponents[2];
-    NSString *userName = [self.soapResponseDict valueForKey:kResponseElementun];
-    NSString *portalAccessKey = [self.soapResponseDict valueForKey:kResponseElementpak];
-    NSString *portalAddress = [self.soapResponseDict valueForKey:kResponseElementportal];
-    NSString *portalVersion = [self.soapResponseDict valueForKey:kResponseElementportalVersion];
-    NSString *locationTag = [self.soapResponseDict valueForKey:kResponseElementloctag];
-    NSString *proxy = [self.soapResponseDict valueForKey:kResponseElementproxyaddress];
-    NSArray *proxyArray = [proxy componentsSeparatedByString:@":"];
-    NSString *proxyAddress = proxyArray[0];
-    NSString *proxyPort = proxyArray[1];
-    
-    strlcpy(event.serverAddress,[serverAddress UTF8String],sizeof(event.serverAddress));
-    strlcpy(event.serverPort, [serverPort UTF8String], sizeof(event.serverPort));
-    strlcpy(event.userName, [userName UTF8String], sizeof(event.userName));
-    strlcpy(event.portalAccessKey, [portalAccessKey UTF8String], sizeof(event.portalAccessKey));
-    strlcpy(event.portalAddress, [portalAddress UTF8String], sizeof(event.portalAddress));
-    strlcpy(event.portalVersion, [portalVersion UTF8String], sizeof(event.portalVersion));
-    strlcpy(event.vmIdentity,[serverIdentity UTF8String], sizeof(event.vmIdentity));
-    strlcpy(event.locationTag, [locationTag UTF8String], sizeof(event.locationTag));
-    if (proxyAddress) {
-        strlcpy(event.vidyoProxyAddress[0], [proxyAddress UTF8String], sizeof(event.vidyoProxyAddress));
-        strlcpy(event.vidyoProxyPort[0], [proxyPort UTF8String], sizeof(event.vidyoProxyPort));
-        event.numberProxies = 1;
-    } else {
-        event.numberProxies = 0;
+    // Initiate the join room process
+    VidyoClientInEventRoomLink event = { 0 };
+	strlcpy(event.portalUri, [self.baseURL UTF8String], sizeof(event.portalUri));
+	strlcpy(event.displaytName, [guestName UTF8String], sizeof(event.displaytName));
+	strlcpy(event.roomKey, [roomKey UTF8String], sizeof(event.roomKey));
+    if (pin) {
+        strlcpy(event.pin, [pin UTF8String], sizeof(event.pin));
     }
-    event.emcpSecured = VIDYO_TRUE;
-    event.guestLogin = VIDYO_TRUE;
     
-	// Send Sign in event to VidyoClient
-	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_SIGN_IN, &event, sizeof(VidyoClientInEventSignIn)) != VIDYO_TRUE) {
+	// Send Join Conference event to VidyoClient
+	if (VidyoClientSendEvent(VIDYO_CLIENT_IN_EVENT_ROOM_LINK, &event, sizeof(VidyoClientInEventRoomLink)) != VIDYO_TRUE) {
 		[self dismissToastAlert];
-		[self createStandardAlertWithTitle:@"Failed to Sign In" andMessage:@""];
+		[self createStandardAlertWithTitle:@"Failed to Join Conference" andMessage:@""];
 	} else {
-		// Sign in in progress
-		self.isSigningIn = TRUE;
-	}
-}
-
-- (void)joinRoomAsGuestStep3 {
-    //Increment the step
-    self.guestLoginStep = 3;
-    
-    NSString *guestID = [self.soapResponseDict valueForKey:kResponseElementGuestID];
-    
-    // Create a web request and start it
-    NSString *soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                             "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:ns1=\"http://portal.vidyo.com/guest\">"
-                             "<env:Body>" "<ns1:GuestJoinConferenceRequest>"
-                             "<ns1:guestID>%@</ns1:guestID>"
-                             "</ns1:GuestJoinConferenceRequest>"
-                             "</env:Body>"
-                             "</env:Envelope>", guestID];
-    self.webRequest = [self createURLRequestWithURL:self.baseURL
-                                        soapMessage:soapMessage
-                                         soapAction:@"GuestJoinConference"];
-    self.webConnection = [[NSURLConnection alloc] initWithRequest:self.webRequest delegate:self];
-	if (!self.webConnection) logMsg(@"The connection is null!");
-    logMsg(@"***Sent SOAP Request GuestJoinConference()***");
+        // Activate joining status flag
+        self.isJoiningConference = TRUE;
+    }
 }
 
 #pragma mark - Alert Display Methods
@@ -622,16 +524,7 @@ FAIL:
 	[self.xmlParser parse];
 
     // Chain into the next sequence of steps for the action
-	if (self.isJoiningConference && self.guestMode) {
-		if (self.guestLoginStep == 0) {
-            [self joinRoomAsGuestStep1];
-            return;
-        } else if (self.guestLoginStep == 1) {
-            [self joinRoomAsGuestStep2];
-            return;
-        }
-	}
-	else if (self.isJoiningConference && !self.guestMode) {
+    if (self.isJoiningConference && !self.guestMode) {
 		[self initiateConferenceStep2];
 		return;
 	}
@@ -688,7 +581,7 @@ FAIL:
 - (NSString *)getElementFromElementName:(NSString *)elementName {
 	NSArray *split = [elementName componentsSeparatedByString:@":"];
 	if (!split || ([split count] != 2)) {
-		NSLog(@"Not a valid elementName : '%@'", elementName);
+		NSLog(@"Not a valid elementName: '%@'", elementName);
 		return nil;
 	}
 	NSString *element = [split objectAtIndex:1];
@@ -767,7 +660,6 @@ FAIL:
 	self.isJoiningConference = NO;
     self.isAutoJoinConferenceEnabled = NO;
 	self.soapResponseDict = nil;
-    self.guestLoginStep = 0;
 }
 
 - (void)resetCredentials {
@@ -783,8 +675,7 @@ FAIL:
 	NSString *urlString;
 	if (self.guestMode) {
 		urlString = [NSString stringWithFormat:@"%@/services/VidyoPortalGuestService?wsdl", baseURL];
-	}
-	else {
+	} else {
         urlString = [NSString stringWithFormat:@"%@/services/v1_1/VidyoPortalUserService?wsdl", baseURL];
 	}
 
@@ -806,11 +697,6 @@ FAIL:
     // If Autojoin is not enabled and initiateConference is called, don't do anything
     if (!self.isAutoJoinConferenceEnabled &&
         [methodName isEqualToString:NSStringFromSelector(@selector(initiateConference))]){
-        return;
-    }
-    // If not guest mode and joinRoomAsGuestStep3 is called, don't do anything
-    if (!self.guestMode &&
-        [methodName isEqualToString:NSStringFromSelector(@selector(joinRoomAsGuestStep3))]){
         return;
     }
     // Execute the passed in method in the main thread
