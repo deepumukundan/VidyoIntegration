@@ -57,7 +57,7 @@
 }
 
 #pragma mark - User Actions
-- (IBAction)loginPressed:(id)sender {
+- (IBAction)loginPressed {
     /*
     [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
                       userName:@"marina"
@@ -70,11 +70,11 @@
             autoJoinConference:NO];
 }
 
-- (IBAction)joinPressed:(id)sender {
+- (IBAction)joinPressed {
 	[self.wrapper initiateConference];
 }
 
-- (IBAction)guestPressed:(id)sender {
+- (IBAction)guestPressed {
     /*
     [self.wrapper joinRoomAsGuestWithURL:@"http://dev20.vidyo.com"
                                  roomKey:@"svXhf7He5RQU"
@@ -83,12 +83,12 @@
     */
     [self.wrapper joinRoomAsGuestWithURL:@"http://ust1.sandboxga.vidyo.com"
                                  roomKey:@"6KwIWUgRrBKS"
-                               guestName:@"GreenBot"
+                               guestName:@"Tester007"
                                      pin:nil];
     
 }
 
-- (IBAction)resizePressed:(id)sender {
+- (IBAction)resizePressed {
     if (!self.windowResized) {
         [self.wrapper resizeWindowWithXcord:60 yCord:66 width:200 height:150];
         self.windowResized = YES;
@@ -98,7 +98,7 @@
     }
 }
 
-- (IBAction)clearPressed:(id)sender {
+- (IBAction)clearPressed {
 	self.textView.text = @"";
 }
 

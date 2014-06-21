@@ -11,3 +11,7 @@
 #import <UIKit/UIKit.h>
 #endif
 
+#ifndef DEBUG
+#  undef  NSLog
+#  define NSLog(...)
+#endif

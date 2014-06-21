@@ -536,7 +536,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions. Simulator version not really required for Vidyo but creating to reduce errors in target project\nxcodebuild -target VidyoWrapper ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target VidyoWrapper -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/libVidyoWrapper.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/libVidyoWrapper.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/libVidyoWrapper.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n# Open the folder in Finder so that user can fetch the files\nopen \"${UNIVERSAL_OUTPUTFOLDER}\"";
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device version\nxcodebuild -target VidyoWrapper ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n#  Simulator version not required since the Vidyo libraries cannot run for i386 architecture\n// xcodebuild -target VidyoWrapper -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/libVidyoWrapper.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/libVidyoWrapper.a\"\n// \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/libVidyoWrapper.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n# Open the folder in Finder so that user can fetch the files\nopen \"${UNIVERSAL_OUTPUTFOLDER}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -843,6 +843,10 @@
 					"$(PROJECT_DIR)/VidyoClientLibrary/lib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";

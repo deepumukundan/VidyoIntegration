@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -18,12 +18,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" alwaysBounceVertical="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ksc-Iz-ntb">
-                                <rect key="frame" x="0.0" y="400" width="320" height="168"/>
+                                <rect key="frame" x="0.0" y="398" width="320" height="170"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="7B0-cV-ggf"/>
-                                    <constraint firstAttribute="height" constant="168" id="l2x-bY-lQT"/>
+                                    <constraint firstAttribute="height" constant="170" id="l2x-bY-lQT"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -37,7 +36,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="7Qb-kz-Dib"/>
+                                    <action selector="loginPressed" destination="vXZ-lx-hvc" eventType="touchUpInside" id="f66-2w-HOI"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nc5-2h-Et8">
@@ -48,7 +47,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="joinPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="hfR-gD-Zt5"/>
+                                    <action selector="joinPressed" destination="vXZ-lx-hvc" eventType="touchUpInside" id="DnP-PN-yB8"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IFz-Xt-Ncj">
@@ -59,8 +58,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="clearPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="VcC-la-PwF"/>
-                                    <action selector="guestPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="CCO-Tl-miT"/>
+                                    <action selector="guestPressed" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Aah-v8-cqE"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOo-Mt-uud">
@@ -71,7 +69,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="resizePressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="WI6-V1-Yt7"/>
+                                    <action selector="resizePressed" destination="vXZ-lx-hvc" eventType="touchUpInside" id="0tx-5m-aq9"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TNp-IN-Va1">
@@ -82,12 +80,14 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="clearPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="99x-9s-6VO"/>
+                                    <action selector="clearPressed" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Kjl-QJ-SoI"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Ksc-Iz-ntb" secondAttribute="trailing" id="DxI-Px-Dul"/>
+                            <constraint firstItem="Ksc-Iz-ntb" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="JDh-qL-53i"/>
                             <constraint firstItem="6YS-eA-xQc" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="PJV-Az-mHn"/>
                             <constraint firstItem="eOo-Mt-uud" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="QXN-Ru-dwT"/>
                             <constraint firstItem="Ksc-Iz-ntb" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Qqc-V7-9MY"/>
@@ -102,13 +102,14 @@
                             <constraint firstItem="Nc5-2h-Et8" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="zTe-D4-vFP"/>
                         </constraints>
                     </view>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="textView" destination="Ksc-Iz-ntb" id="5uz-ot-RX2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1633" y="-320"/>
+            <point key="canvasLocation" x="-2124" y="-144"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

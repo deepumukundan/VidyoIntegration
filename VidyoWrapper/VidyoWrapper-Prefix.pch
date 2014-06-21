@@ -8,3 +8,8 @@
 @import Foundation;
 @import UIKit;
 #endif
+
+#ifndef DEBUG
+#  undef  NSLog
+#  define NSLog(...)
+#endif

@@ -613,7 +613,7 @@ FAIL:
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
-    NSLog(@"%@",self.soapResponseDict);
+    logMsg([NSString stringWithFormat:@"%@",self.soapResponseDict]);
     NSString *memberStatus = [self.soapResponseDict valueForKey:kResponseElementMemberStatus];
     if (memberStatus && ![memberStatus isEqualToString:@"Online"]) {
         self.isJoiningConference = NO;
