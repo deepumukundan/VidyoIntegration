@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		553780D418F7F1D900D6A070 /* UniversalLib */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 553780D518F7F1D900D6A070 /* Build configuration list for PBXAggregateTarget "UniversalLib" */;
-			buildPhases = (
-				553780D818F7F1E200D6A070 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = UniversalLib;
-			productName = UniversalLib;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		553780B018F7F16F00D6A070 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 554263EC18F0751800BE41F9 /* Foundation.framework */; };
 		553780BD18F7F16F00D6A070 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5542640B18F0751800BE41F9 /* XCTest.framework */; };
@@ -100,6 +86,7 @@
 		553780C518F7F16F00D6A070 /* VidyoWrapperTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VidyoWrapperTests-Info.plist"; sourceTree = "<group>"; };
 		553780C718F7F16F00D6A070 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		553780C918F7F16F00D6A070 /* VidyoWrapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VidyoWrapperTests.m; sourceTree = "<group>"; };
+		553BE96C1995CEF7004EFBCA /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.md; sourceTree = "<group>"; };
 		554263E918F0751800BE41F9 /* VidyoIntegration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VidyoIntegration.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		554263EC18F0751800BE41F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		554263EE18F0751800BE41F9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -214,6 +201,7 @@
 		554263E018F0751800BE41F9 = {
 			isa = PBXGroup;
 			children = (
+				553BE96C1995CEF7004EFBCA /* Readme.md */,
 				559DD0BF19055D8500BFA556 /* VidyoClientLibrary */,
 				5573098318F13A57005FEBB0 /* Wrapper */,
 				554263F218F0751800BE41F9 /* VidyoIntegration */,
@@ -489,7 +477,6 @@
 				5542640918F0751800BE41F9 /* VidyoIntegrationTests */,
 				553780AE18F7F16E00D6A070 /* VidyoWrapper */,
 				553780BB18F7F16F00D6A070 /* VidyoWrapperTests */,
-				553780D418F7F1D900D6A070 /* UniversalLib */,
 			);
 		};
 /* End PBXProject section */
@@ -523,22 +510,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		553780D818F7F1E200D6A070 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device version\nxcodebuild -target VidyoWrapper ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n#  Simulator version not required since the Vidyo libraries cannot run for i386 architecture\n// xcodebuild -target VidyoWrapper -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/libVidyoWrapper.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/libVidyoWrapper.a\"\n// \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/libVidyoWrapper.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n# Open the folder in Finder so that user can fetch the files\nopen \"${UNIVERSAL_OUTPUTFOLDER}\"";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		553780AB18F7F16E00D6A070 /* Sources */ = {
@@ -722,22 +693,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
-		553780D618F7F1D900D6A070 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		553780D718F7F1D900D6A070 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -952,15 +907,6 @@
 			buildConfigurations = (
 				553780CD18F7F16F00D6A070 /* Debug */,
 				553780CE18F7F16F00D6A070 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		553780D518F7F1D900D6A070 /* Build configuration list for PBXAggregateTarget "UniversalLib" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				553780D618F7F1D900D6A070 /* Debug */,
-				553780D718F7F1D900D6A070 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
