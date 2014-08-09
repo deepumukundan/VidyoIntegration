@@ -58,15 +58,9 @@
 
 #pragma mark - User Actions
 - (IBAction)loginPressed {
-    /*
     [self.wrapper loginWithURL:@"http://dev20.vidyo.com"
                       userName:@"marina"
                       passWord:@"marina"
-            autoJoinConference:NO];
-    */
-    [self.wrapper loginWithURL:@"http://ust1.sandboxga.vidyo.com"
-                      userName:@"ustvidyomob"
-                      passWord:@"test"
             autoJoinConference:NO];
 }
 
@@ -75,17 +69,10 @@
 }
 
 - (IBAction)guestPressed {
-    /*
     [self.wrapper joinRoomAsGuestWithURL:@"http://dev20.vidyo.com"
                                  roomKey:@"svXhf7He5RQU"
                                guestName:@"YellowBot"
                                      pin:nil];
-    */
-    [self.wrapper joinRoomAsGuestWithURL:@"http://ust1.sandboxga.vidyo.com"
-                                 roomKey:@"6KwIWUgRrBKS"
-                               guestName:@"Tester007"
-                                     pin:nil];
-    
 }
 
 - (IBAction)resizePressed {
